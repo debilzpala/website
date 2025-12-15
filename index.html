@@ -114,4 +114,159 @@ window.addEventListener('load', function() {
 
 <script>
 window.addEventListener('load', function() {
-    // Działająca
+    // Działająca funkcja do kopiowania IP
+    const copyButton = document.getElementById('copyButton');
+    if (copyButton) {
+        copyButton.addEventListener('click', function(event) {
+            event.preventDefault(); 
+            
+            const ip = document.getElementById('ip').innerText;
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(ip)
+                    .then(() => {
+                        alert('✅ IP skopiowane: ' + ip + ' (Metoda nowa)');
+                    })
+                    .catch(err => {
+                        fallbackCopy(ip);
+                    });
+            } else {
+                fallbackCopy(ip);
+            }
+
+            function fallbackCopy(text) {
+                const tempInput = document.createElement('textarea');
+                tempInput.value = text;
+                tempInput.style.position = 'fixed';
+                tempInput.style.opacity = '0';
+                document.body.appendChild(tempInput);
+                
+                tempInput.select();
+                tempInput.setSelectionRange(0, 99999);
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        alert('✅ IP Servera skopiowane IP to: ' + text + ' ()'); 
+                    } else {
+                        alert('❌ Nie udało się skopiować IP. Wciśnij Ctrl+C/Cmd+C: ' + text);
+                    }
+                } catch (err) {
+                    alert('❌ Błąd kopiowania. Spróbuj ręcznie: ' + text);
+                }
+                
+                document.body.removeChild(tempInput);
+            }
+        });
+    }
+}); 
+
+
+function toggleTheme(){ document.body.classList.toggle('light'); }
+
+// particles
+const c=document.getElementById('particles'),x=c.getContext('2d');
+function resize(){c.width=innerWidth;c.height=innerHeight} resize(); onresize=resize;
+let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
+function anim(){ x.clearRect(0,0,c.width,c.height); p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0}); requestAnimationFrame(anim)} anim();
+
+// MC server status - OSTATECZNA POPRAWKA LOGIKI STANU
+let lastOnline = undefined; 
+function fetchStatus(){
+  console.log('Sprawdzanie statusu serwera...');
+  fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
+    .then(r => {
+      if (!r.ok) {
+        console.error('Błąd HTTP z mcstatus.io:', r.status, r.statusText);
+        throw new Error('Błąd HTTP: ' + r.status);
+      }
+      return r.json();
+    })
+    .then(d=>{
+      const isOnlineFromAPI = d.online === true;
+      const onlinePlayers = d.players?.online ?? 0;
+      
+      let statusDisplay;
+      let currentStatus; // true = gotowy do gry, false = nie gotowy/lobby/offline
+
+      if (isOnlineFromAPI) {
+          // API zwróciło, że serwer działa
+          statusDisplay = '🟢 ONLINE';
+          currentStatus = true;
+      } else { 
+          // API zwróciło d.online: false (LOBBY/CZEKANIE Aternos)
+          statusDisplay = '🟡 CZEKANIE (LOBBY)';
+          currentStatus = false;
+      }
+
+      // Aktualizacja licznika graczy i % (używamy danych z API)
+      const max=d.players?.max ?? 0;
+      document.getElementById('status').innerText = statusDisplay;
+      document.getElementById('players').innerText = onlinePlayers + ' / ' + max;
+      document.getElementById('percent').innerText = max ? ('📊 ' + Math.round((onlinePlayers / max) * 100) + '%') : '';
+      
+      console.log('Aktualny Status (Gra): ' + currentStatus + '. Poprzedni Status: ' + lastOnline);
+      
+      // Logika Webhooka: Wysyłanie tylko przy ZMIANIE STANU
+      // Webhook teraz monitoruje, czy serwer jest gotowy do gry (true) czy w lobby/offline (false)
+      if(lastOnline === undefined) {
+        lastOnline = currentStatus;
+        return; 
+      }
+      
+      if(lastOnline !== currentStatus) {
+        if (currentStatus) {
+            sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony i jest gotowy do gry!');
+        } else {
+            sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer wszedł w tryb oczekiwania (LOBBY) lub został wyłączony.');
+        }
+        lastOnline = currentStatus; // Aktualizujemy stan po wysłaniu powiadomienia
+      }
+    })
+    .catch(e=>{
+      console.error('Błąd pobierania statusu serwera (sieć lub API):', e);
+      document.getElementById('status').innerText='⚠️ BŁĄD API'; 
+      document.getElementById('players').innerText='-';
+      document.getElementById('percent').innerText='';
+    });
+}
+fetchStatus();
+setInterval(fetchStatus,1000);
+
+/**
+ * FUNKCJA sendDiscord
+ */
+function sendDiscord(msg){
+  // URL podany przez Ciebie:
+  const webhook = 'https://discordapp.com/api/webhooks/1450217665359642624/X9P7XIyJtZvQ7Ncqi0tn0_C3Qh4caj4S2gpB6Wm99lc4q8hZXgdEpkdD5wwoPz1jys6e'; 
+
+  fetch(webhook, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content: msg })
+  })
+  .then(response => {
+      if (!response.ok) {
+          console.error('Błąd wysyłania webhooka. Prawdopodobnie URL jest nieaktywny lub skasowany (status: ' + response.status + ').', response.statusText);
+      }
+  })
+  .catch(error => {
+      console.error('Błąd połączenia webhooka (sieć):', error);
+  });
+}
+
+// language
+let lang = navigator.language && navigator.language.startsWith('pl') ? 'pl' : 'en';
+function toggleLang(){
+  lang = lang==='pl'?'en':'pl';
+  applyLang();
+}
+function applyLang(){
+  document.querySelectorAll('[data-pl]').forEach(e=>{
+    e.innerText = e.dataset[lang];
+  });
+}
+applyLang();
+</script>
+</body>
+</html>
