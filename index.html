@@ -1,5 +1,167 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeoNCraf – Serwer Minecraft</title>
+  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+  <style>
+    /* POPRAWKA FONTU: Wymuszenie czcionki 'Minecraft' dla wszystkich elementów */
+    *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+        font-family:'Minecraft', 'Inter', sans-serif !important; 
+    }
+
+    /* Reszta Twoich stylów CSS */
+    :root{--bg1:#1b1f3b;--bg2:#0a0d1a;--text:#fff;--card:rgba(255,255,255,.05)}body.light{--bg1:#f4f6ff;--bg2:#dfe3ff;--text:#000;--card:rgba(0,0,0,.05)}body{background:radial-gradient(circle at top,var(--bg1),var(--bg2));color:var(--text);line-height:1.6;overflow-x:hidden}canvas{position:fixed;inset:0;z-index:-1}header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px}h1{font-size:clamp(3rem,6vw,5rem);font-weight:900;background:linear-gradient(90deg,#6cf,#9f6cff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:float 3s ease-in-out infinite}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}.btns{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}.btn{padding:14px 28px;border-radius:14px;text-decoration:none;font-weight:600;transition:.25s;cursor:pointer}.btn:hover{transform:scale(1.08) rotate(-1deg);box-shadow:0 15px 40px rgba(0,0,0,.4)}.primary{background:linear-gradient(90deg,#6cf,#9f6cff);color:#000}.secondary{border:2px solid #6cf;color:#6cf}section{padding:80px 20px;max-width:1200px;margin:auto}.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px}.card{background:var(--card);border-radius:24px;padding:30px;backdrop-filter:blur(14px);transition:.25s}.card:hover{transform:translateY(-10px) scale(1.03)}.toggle{position:fixed;top:20px;right:20px;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#6cf,#9f6cff);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.4rem;z-index:10}#langToggle{top:80px}.creeper{width:80px;height:80px;margin:40px auto 0;background:linear-gradient(#4caf50,#2e7d32);border-radius:12px;position:relative;animation:walk 3s ease-in-out infinite}.creeper:before,.creeper:after{content:'';position:absolute;background:#000}.creeper:before{width:14px;height:14px;left:18px;top:20px;box-shadow:30px 0 0 #000}.creeper:after{width:18px;height:28px;left:31px;top:40px}@keyframes walk{0%,100%{transform:translateX(0)}50%{transform:translateY(-10px)}}
+
+/* FINALNA POPRAWKA PRELOADERA: Użycie tylko opacity do płynnego zanikania */
+#preloader{
+  position:fixed;
+  inset:0;
+  background:#050816;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  font-size:1.2rem;
+  opacity: 1; 
+  transition: opacity 0.5s ease; 
+}
+#preloader.hidden { 
+  opacity: 0 !important;
+}
+</style>
+</head>
+<body>
+<div id="preloader"><div class="loader">Ładowanie Strony NeoNCraf...</div></div>
+<canvas id="particles"></canvas>
+<div id="themeToggle" class="toggle" onclick="toggleTheme()">🌙</div>
+<div id="langToggle" class="toggle" style="top:80px" onclick="toggleLang()">🌍</div>
+<div class="toggle" onclick="toggleTheme()">🌙</div>
+
+<header>
+  <div style="text-align:center;line-height:1.2">
+  
+</div>
+<p data-pl="Nowoczesny serwer Minecraft nowej generacji." data-en="A modern next-generation Minecraft server.">
+    Nowoczesny serwer Minecraft nowej generacji.
+  </div>
+    <h1 data-pl="NeoNCraf" data-en="NeoNCraf">NeoNCraf</h1>
+  </div>
+  
+  </p>
+<div class="btns">
+  <a href="#" id="copyButton" class="btn primary">Skopiuj IP serwera</a>
+  <a href="https://discord.gg/Ty9axmj8" target="_blank" class="btn secondary">Discord</a>
+</div>
+  
+  <p class="ip">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
+</header>
+
+<section>
+  <div class="card" style="text-align:center; margin-bottom:40px">
+    <h3 data-pl="📊 Status serwera" data-en="📊 Server status">📊 Status serwera</h3>
+    <p id="status">Sprawdzanie...</p>
+    <p data-pl="👥 Gracze online:" data-en="👥 Players online:">👥 Gracze online:</p>
+    <p><span id="players">-</span></p>
+    <p id="percent">-</p>
+    <div class="creeper"></div>
+  </div>
+  </div>
+  <div class="features">
+    <div class="card">
+      <h3>⚡ Wydajność</h3>
+      <p>Stabilny serwer, niski ping i brak lagów – gramy płynnie 24/7.</p>
+    </div>
+    <div class="card">
+      <h3>🧩 Unikalne tryby</h3>
+      <p>Autorskie systemy, eventy i mechaniki, których nie znajdziesz nigdzie indziej.</p>
+    </div>
+    <div class="card">
+      <h3>👥 Społeczność</h3>
+      <p>Aktywni gracze, pomocna administracja i świetna atmosfera.</p>
+    </div>
+    <div class="card">
+      <h3>🔒 Bezpieczeństwo</h3>
+      <p>Anty-cheat, backupy i ochrona danych graczy.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2025 NeoNCraf • Serwer Minecraft
+</footer>
+
 <script>
-// ... (cały kod prekodera, kopiowania, particles, toggleTheme, toggleLang zostaje bez zmian) ...
+window.addEventListener('load', function() {
+    const p = document.getElementById('preloader');
+    if (p) {
+        // Opóźnienie ukrycia o 3000 ms (3 sekundy) od momentu pełnego załadowania strony
+        setTimeout(() => {
+            p.classList.add('hidden'); 
+            
+            setTimeout(() => {
+                p.style.display = 'none';
+            }, 500); 
+
+        }, 3000); 
+    }
+});
+</script>
+
+<script>
+window.addEventListener('load', function() {
+    // Działająca funkcja do kopiowania IP
+    const copyButton = document.getElementById('copyButton');
+    if (copyButton) {
+        copyButton.addEventListener('click', function(event) {
+            event.preventDefault(); 
+            
+            const ip = document.getElementById('ip').innerText;
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(ip)
+                    .then(() => {
+                        alert('✅ IP skopiowane: ' + ip + ' (Metoda nowa)');
+                    })
+                    .catch(err => {
+                        fallbackCopy(ip);
+                    });
+            } else {
+                fallbackCopy(ip);
+            }
+
+            function fallbackCopy(text) {
+                const tempInput = document.createElement('textarea');
+                tempInput.value = text;
+                tempInput.style.position = 'fixed';
+                tempInput.style.opacity = '0';
+                document.body.appendChild(tempInput);
+                
+                tempInput.select();
+                tempInput.setSelectionRange(0, 99999);
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        alert('✅ IP Servera skopiowane IP to: ' + text + ' ()'); 
+                    } else {
+                        alert('❌ Nie udało się skopiować IP. Wciśnij Ctrl+C/Cmd+C: ' + text);
+                    }
+                } catch (err) {
+                    alert('❌ Błąd kopiowania. Spróbuj ręcznie: ' + text);
+                }
+                
+                document.body.removeChild(tempInput);
+            }
+        });
+    }
+}); 
+
+
 function toggleTheme(){ document.body.classList.toggle('light'); }
 
 // particles
@@ -12,7 +174,7 @@ function anim(){ x.clearRect(0,0,c.width,c.height); p.forEach(a=>{x.beginPath();
 let lastOnline = undefined; 
 function fetchStatus(){
   console.log('Sprawdzanie statusu serwera (Ostateczna logika Aternos)...');
-  // Powrót do mcstatus.io
+  // Używamy API mcstatus.io
   fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
     .then(r => {
       if (!r.ok) {
@@ -31,16 +193,16 @@ function fetchStatus(){
       let currentStatus; // true = gotowy do gry, false = w lobby/offline
 
       if (isOnlineFromAPI) {
-          // Serwer w pełni odpowiada (ONLINE)
+          // 1. Serwer w pełni odpowiada (online: true)
           statusDisplay = '🟢 ONLINE';
           currentStatus = true;
       } else if (d.host && d.port) { 
-          // API odpowiedziało, ale online: false ORAZ mamy dane hosta. 
+          // 2. API odpowiedziało, ale online: false ORAZ mamy dane hosta. 
           // To oznacza, że serwer Aternos jest włączony, ale w trybie oczekiwania.
           statusDisplay = '🟡 CZEKANIE (LOBBY)';
           currentStatus = false;
       } else {
-          // Błąd, ale nie błąd sieci (np. API nie może znaleźć hosta)
+          // 3. Brak pełnej odpowiedzi, ale nie błąd sieci (API nie może znaleźć serwera)
           statusDisplay = '🔴 OFFLINE';
           currentStatus = false;
       }
@@ -50,7 +212,7 @@ function fetchStatus(){
       document.getElementById('players').innerText = onlinePlayers + ' / ' + maxPlayers;
       document.getElementById('percent').innerText = maxPlayers ? ('📊 ' + Math.round((onlinePlayers / maxPlayers) * 100) + '%') : '';
       
-      // Logika Webhooka
+      // Logika Webhooka: Wysyłanie tylko przy ZMIANIE STANU
       if(lastOnline === undefined) {
         lastOnline = currentStatus;
         return; 
@@ -69,7 +231,7 @@ function fetchStatus(){
       console.error('Błąd połączenia z API (Prawdziwy OFF):', e);
       // Jeśli błąd, to znaczy, że serwer jest niedostępny
       document.getElementById('status').innerText='🔴 OFFLINE'; 
-      // Wysyłamy webhooka tylko jeśli ostatni znany stan to nie był offline
+      // Wysyłamy webhooka tylko jeśli ostatni znany stan to był ONLINE (żeby nie spamować)
       if (lastOnline === true) {
           sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony lub wystąpił błąd API.');
       }
