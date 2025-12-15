@@ -397,7 +397,7 @@ let lastStatus = undefined;
 function fetchStatus(){
   console.log('Sprawdzanie statusu serwera (Ostateczna logika Aternos/MOTD)...');
   // Używamy API mcstatus.io
-  fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
+  fetch('https://api.mcstatus.io/v2/status/java/NeoNCraf_Mc.aternos.me:34490')
     .then(r => {
       if (!r.ok) {
         console.error('Błąd HTTP z mcstatus.io:', r.status, r.statusText);
