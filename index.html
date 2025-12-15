@@ -149,7 +149,7 @@
         
         /* Styl pojedynczej karty funkcji - ZMIANY TUTAJ! */
         .card{
-            /* Zmniejszone wymiary dla małych i pionowych kart (100px szer. x 200px wys.) */
+            /* Ustawienia dla małych i pionowych kart (100px szer. x 200px wys.) */
             min-width: 100px; /* Zmniejszona szerokość */
             min-height: 200px; /* Zmniejszona wysokość (proporcje 1:2) */
             
@@ -395,7 +395,7 @@ function anim(){ x.clearRect(0,0,c.width,c.height); p.forEach(a=>{x.beginPath();
 let lastStatus = undefined; 
 
 function fetchStatus(){
-  console.log('Sprawdzanie statusu serwera (Ostateczna logika Aternos/MOTD)...');
+  console.log('Sprawdzanie statusu serwera (Logika v3: Najpierw API online, potem MOTD)...');
   // Używamy API mcstatus.io
   fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
     .then(r => {
@@ -406,7 +406,9 @@ function fetchStatus(){
       return r.json();
     })
     .then(d=>{
-      // Pobieranie motd - bezpieczne pobranie wszystkich linii i złączenie
+      // Zmienna logiczna, czy API uważa serwer za online
+      const isApiOnline = d.online ?? false; 
+      // Pobieranie motd
       const motdText = (d.motd?.clean ?? []).join(' ').toLowerCase();
 
       let statusDisplay;
@@ -414,24 +416,28 @@ function fetchStatus(){
       const onlinePlayers = d.players?.online ?? 0;
       const maxPlayers = d.players?.max ?? 0;
 
-      // --- IMPLEMENTACJA USTALONEJ LOGIKI ---
+      // --- NOWA LOGIKA KONTROLI STANU ---
 
-      // 1. Priorytet 1: MOTD zawiera "offline" -> Wymuszenie OFFLINE 
-      if (motdText.includes("offline")) {
-          statusDisplay = '🟡 OFFLINE (Wymuszone komunikat.)';
+      if (isApiOnline) {
+          // Stan 1: Serwer jest ZIELONY, ponieważ API zwraca "online: true"
+          statusDisplay = '🟢 ONLINE';
+          currentStatus = 'online';
+          document.getElementById('players').innerText = onlinePlayers + ' / ' + maxPlayers;
+          document.getElementById('percent').innerText = maxPlayers ? ('📊 ' + Math.round((onlinePlayers / maxPlayers) * 100) + '%') : '';
+
+      } else if (motdText.includes("offline")) {
+          // Stan 2: Serwer jest ŻÓŁTY, ponieważ API zwraca "online: false", ale MOTD sugeruje konserwację
+          statusDisplay = '🟡 OFFLINE (Konserwacja)';
           currentStatus = 'motd_offline';
           document.getElementById('players').innerText = '0 / 0';
           document.getElementById('percent').innerText = '📊 0%';
 
-      } 
-      // 2. MOTD nie zawiera "offline" -> Wymuszenie ONLINE 
-      else {
-          statusDisplay = '🟢 ONLINE';
-          currentStatus = 'online';
-          
-          // Aktualizacja graczy (tylko w stanie ONLINE)
-          document.getElementById('players').innerText = onlinePlayers + ' / ' + maxPlayers;
-          document.getElementById('percent').innerText = maxPlayers ? ('📊 ' + Math.round((onlinePlayers / maxPlayers) * 100) + '%') : '';
+      } else {
+          // Stan 3: Serwer jest CZERWONY, API zwraca "online: false" i nie ma specjalnego MOTD
+          statusDisplay = '🔴 OFFLINE';
+          currentStatus = 'offline';
+          document.getElementById('players').innerText = '0 / 0';
+          document.getElementById('percent').innerText = '📊 0%';
       }
 
       // Aktualizacja DOM statusu
@@ -444,23 +450,28 @@ function fetchStatus(){
       }
       
       if(lastStatus !== currentStatus) {
+        
+        // Wysyłanie powiadomienia Discord
         if (currentStatus === 'online') {
-            sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer jest dostępny do gry (Status: API true LUB Wyjątek Aternos).');
+            sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer jest dostępny do gry.');
         } else if (currentStatus === 'motd_offline') {
-            sendDiscord('🟡 **NeoNCraf OFFLINE (Komunikat)**\nStatus został zmieniony przez MOTD. Serwer w trakcie konserwacji/wyłączania.');
+            sendDiscord('🟡 **NeoNCraf OFFLINE (Konserwacja)**\nStatus został zmieniony przez MOTD. Serwer w trakcie konserwacji/wyłączania.');
+        } else if (currentStatus === 'offline') {
+            sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer nie odpowiada i nie jest w trybie konserwacji.');
         }
+        
         lastStatus = currentStatus; // Zapisz nowy stan
       }
     })
     .catch(e=>{
-      console.error('Błąd połączenia z API (Prawdziwy OFF):', e);
-      // Prawdziwy OFFLINE
+      console.error('Błąd połączenia z API (Błąd sieci/Czerwony stan - API Error):', e);
+      // Prawdziwy błąd, który nie jest soft-off
       const currentStatus = 'error_offline';
       document.getElementById('status').innerText='🔴 OFFLINE (Błąd API)'; 
       
       // Wysyłamy webhooka tylko jeśli ostatni znany stan to nie był offline
       if (lastStatus !== currentStatus && lastStatus !== undefined) {
-          sendDiscord('🔴 **NeoNCraf OFFLINE (Błąd)**\nSerwer jest niedostępny lub wystąpił błąd API.');
+          sendDiscord('🚨 **NeoNCraf OFFLINE (Błąd API)**\nSerwer jest niedostępny lub wystąpił błąd połączenia z API.');
       }
       lastStatus = currentStatus;
       document.getElementById('players').innerText='0 / 0';
