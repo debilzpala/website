@@ -1,23 +1,3 @@
-Rozumiem, że to jest bardzo frustrujące. Przepraszam, że ten jeden element wciąż odmawia współpracy\!
-
-Skoro przycisk kopiowania IP działa, wiemy, że skrypty są prawidłowo ładowane z URL-a, a problem leży wyłącznie w logice ukrywania elementu `#preloader`.
-
-Najprawdopodobniej problemem jest to, że używana metoda (`p.style.display = 'none';`) jest za słaba i jest **nadpisywana przez domyślne style CSS przeglądarki lub inną regułę CSS**.
-
-### 🛠️ Ostateczna Naprawa: Ukrywanie Klasą i Płynne Wygaszanie
-
-Wprowadzam najbardziej profesjonalną i niezawodną metodę, która zawsze działa:
-
-1.  **Zmiana CSS:** Wprowadzimy klasę `hidden`, która nie tylko ukryje, ale również nada zerową przezroczystość, a następnie usunie element z layoutu.
-2.  **Dokładne Opóźnienie:** Użyjemy `setTimeout(..., 3000)` w połączeniu z `window.load` (który i tak już działa), aby mieć pewność, że preloader zniknie **dokładnie 3 sekundy** po pełnym załadowaniu strony.
-
-Proszę, użyj poniższego, **ostatecznego pliku `index.html`**. Zmiany są w sekcji `<style>` i w pierwszym bloku `<script>`.
-
------
-
-## 💾 Kompletny i Finalny Plik `index.html`
-
-```html
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -26,7 +6,7 @@ Proszę, użyj poniższego, **ostatecznego pliku `index.html`**. Zmiany są w se
   <title>NeoNCraf – Serwer Minecraft</title>
   <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
   <style>*{box-sizing:border-box;margin:0;padding:0;font-family:'Minecraft','Inter',sans-serif}:root{--bg1:#1b1f3b;--bg2:#0a0d1a;--text:#fff;--card:rgba(255,255,255,.05)}body.light{--bg1:#f4f6ff;--bg2:#dfe3ff;--text:#000;--card:rgba(0,0,0,.05)}body{background:radial-gradient(circle at top,var(--bg1),var(--bg2));color:var(--text);line-height:1.6;overflow-x:hidden}canvas{position:fixed;inset:0;z-index:-1}header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px}h1{font-size:clamp(3rem,6vw,5rem);font-weight:900;background:linear-gradient(90deg,#6cf,#9f6cff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:float 3s ease-in-out infinite}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}.btns{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}.btn{padding:14px 28px;border-radius:14px;text-decoration:none;font-weight:600;transition:.25s;cursor:pointer}.btn:hover{transform:scale(1.08) rotate(-1deg);box-shadow:0 15px 40px rgba(0,0,0,.4)}.primary{background:linear-gradient(90deg,#6cf,#9f6cff);color:#000}.secondary{border:2px solid #6cf;color:#6cf}section{padding:80px 20px;max-width:1200px;margin:auto}.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px}.card{background:var(--card);border-radius:24px;padding:30px;backdrop-filter:blur(14px);transition:.25s}.card:hover{transform:translateY(-10px) scale(1.03)}.toggle{position:fixed;top:20px;right:20px;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#6cf,#9f6cff);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.4rem;z-index:10}#langToggle{top:80px}.creeper{width:80px;height:80px;margin:40px auto 0;background:linear-gradient(#4caf50,#2e7d32);border-radius:12px;position:relative;animation:walk 3s ease-in-out infinite}.creeper:before,.creeper:after{content:'';position:absolute;background:#000}.creeper:before{width:14px;height:14px;left:18px;top:20px;box-shadow:30px 0 0 #000}.creeper:after{width:18px;height:28px;left:31px;top:40px}@keyframes walk{0%,100%{transform:translateX(0)}50%{transform:translateX(-10px)}}
-/* ZMIANA 1: Dodanie przejścia CSS do preloadera */
+/* ZMIANA 1: Dodanie przejścia CSS do preloadera z !important */
 #preloader{
   position:fixed;
   inset:0;
@@ -36,12 +16,12 @@ Proszę, użyj poniższego, **ostatecznego pliku `index.html`**. Zmiany są w se
   justify-content:center;
   z-index:999;
   font-size:1.2rem;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease !important; /* KLUCZOWE DLA FADEOUTU */
 }
-/* ZMIANA 2: Klasa do ukrycia elementu */
+/* ZMIANA 2: Klasa do ukrycia elementu z !important */
 #preloader.hidden { 
-  opacity: 0;
-  visibility: hidden;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 </style>
 </head>
@@ -111,9 +91,9 @@ window.addEventListener('load', function() {
     if (p) {
         // Opóźnienie ukrycia o 3000 ms (3 sekundy) od momentu pełnego załadowania strony
         setTimeout(() => {
-            p.classList.add('hidden'); // Krok 1: Wygaszanie (0.5s)
+            p.classList.add('hidden'); // Krok 1: Włącza CSS transition (fadeout 0.5s)
             
-            // Krok 2: Całkowite usunięcie z layoutu po zakończeniu wygaszania
+            // Krok 2: Całkowite usunięcie z layoutu po zakończeniu wygaszania (500ms = 0.5s)
             setTimeout(() => {
                 p.style.display = 'none';
             }, 500); 
@@ -124,7 +104,6 @@ window.addEventListener('load', function() {
 </script>
 
 <script>
-// Używamy window.load dla głównej logiki, aby zapewnić, że wszystkie elementy są dostępne
 window.addEventListener('load', function() {
     // Działająca funkcja do kopiowania IP
     const copyButton = document.getElementById('copyButton');
@@ -229,4 +208,3 @@ applyLang();
 </script>
 </body>
 </html>
-```
