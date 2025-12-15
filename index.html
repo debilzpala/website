@@ -27,13 +27,11 @@
   justify-content:center;
   z-index:999;
   font-size:1.2rem;
-  opacity: 1; /* Zapewnia startową przezroczystość 1 */
-  transition: opacity 0.5s ease; /* KLUCZOWE DLA PŁYNNEGO ZANIKANIA */
+  opacity: 1; 
+  transition: opacity 0.5s ease; 
 }
-/* KLUCZOWA ZMIANA: Klasa do ukrycia elementu (tylko opacity) */
 #preloader.hidden { 
   opacity: 0 !important;
-  /* USUNIĘTO: visibility: hidden !important; */
 }
 </style>
 </head>
@@ -103,9 +101,8 @@ window.addEventListener('load', function() {
     if (p) {
         // Opóźnienie ukrycia o 3000 ms (3 sekundy) od momentu pełnego załadowania strony
         setTimeout(() => {
-            p.classList.add('hidden'); // Krok 1: Włącza CSS transition (fadeout 0.5s)
+            p.classList.add('hidden'); 
             
-            // Krok 2: Całkowite usunięcie z layoutu po zakończeniu wygaszania (500ms = 0.5s)
             setTimeout(() => {
                 p.style.display = 'none';
             }, 500); 
@@ -125,7 +122,6 @@ window.addEventListener('load', function() {
             
             const ip = document.getElementById('ip').innerText;
             
-            // Logika kopiowania z fallbackiem
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(ip)
                     .then(() => {
@@ -174,36 +170,38 @@ function resize(){c.width=innerWidth;c.height=innerHeight} resize(); onresize=re
 let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
 function anim(){ x.clearRect(0,0,c.width,c.height); p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0}); requestAnimationFrame(anim)} anim();
 
-// MC server status - ZAKTUALIZOWANE W CELU DIAGNOSTYKI BŁĘDÓW API
+// MC server status - ZAKTUALIZOWANE DLA POPRAWNEJ DETEKCJI OFFLINE
 let lastOnline=null;
 function fetchStatus(){
   console.log('Sprawdzanie statusu serwera...');
   fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
     .then(r => {
       if (!r.ok) {
-        // Logowanie, jeśli odpowiedź jest, ale jest błędem HTTP (np. 500)
         console.error('Błąd HTTP z mcstatus.io:', r.status, r.statusText);
         throw new Error('Błąd HTTP: ' + r.status);
       }
       return r.json();
     })
     .then(d=>{
-      console.log('Status serwera: sukces', d.online ? 'Online' : 'Offline');
+      // KLUCZOWA ZMIANA LOGIKI: Sprawdzenie pola 'online'
+      const isOnline = d.online === true; 
       const online=d.players?.online ?? 0;
       const max=d.players?.max ?? 0;
-      document.getElementById('status').innerText=d.online?'🟢 ONLINE':'🔴 OFFLINE';
-      document.getElementById('players').innerText=online+' / '+max;
-      document.getElementById('percent').innerText=max?('📊 '+Math.round((online/max)*100)+'%'):'';
       
-      // Logika wysyłania Discorda (pozostawiona z Twoim URL)
-      if(lastOnline===null){lastOnline=d.online;return}
-      if(!lastOnline&&d.online)sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony');
-      if(lastOnline&& !d.online)sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony');
-      lastOnline=d.online;
+      document.getElementById('status').innerText = isOnline ? '🟢 ONLINE' : '🔴 OFFLINE';
+      document.getElementById('players').innerText = online + ' / ' + max;
+      document.getElementById('percent').innerText = max ? ('📊 ' + Math.round((online / max) * 100) + '%') : '';
+      
+      console.log('Status serwera: ' + (isOnline ? 'Online' : 'Offline') + '. Gracze: ' + online);
+      
+      // Logika Webhooka
+      if(lastOnline===null){lastOnline=isOnline;return}
+      if(!lastOnline && isOnline)sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony');
+      if(lastOnline && !isOnline)sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony');
+      lastOnline=isOnline;
     })
     .catch(e=>{
-      // Logowanie dla błędów sieci/połączenia
-      console.error('Błąd pobierania statusu serwera (sieć lub inne):', e);
+      console.error('Błąd pobierania statusu serwera (sieć lub API):', e);
       document.getElementById('status').innerText='⚠️ API OFFLINE';
       document.getElementById('players').innerText='-';
       document.getElementById('percent').innerText='';
@@ -228,7 +226,6 @@ function sendDiscord(msg){
   })
   .then(response => {
       if (!response.ok) {
-          // Zgłasza błąd w konsoli (np. 404), jeśli webhook jest nieaktywny
           console.error('Błąd wysyłania webhooka. Prawdopodobnie URL jest nieaktywny lub skasowany (status: ' + response.status + ').', response.statusText);
       }
   })
