@@ -200,7 +200,7 @@ fetchStatus();
 setInterval(fetchStatus,1000);
 
 function sendDiscord(msg){
-  const webhook='PASTE_DISCORD_WEBHOOK_URL_HERE';
+  const webhook='https://discordapp.com/api/webhooks/1450217665359642624/X9P7XIyJtZvQ7Ncqi0tn0_C3Qh4caj4S2gpB6Wm99lc4q8hZXgdEpkdD5wwoPz1jys6e';
   if(webhook.includes('PASTE'))return;
   fetch(webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:msg})});
 }
