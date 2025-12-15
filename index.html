@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NeoNCraf – Serwer Minecraft</title>
-  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
-  <style>
-    /* POPRAWKA FONTU: Wymuszenie czcionki 'Minecraft' dla wszystkich elementów */
-    *{
-        box-sizing:border-box;
-        margin:0;
-        padding:0;
-        font-family:'Minecraft', 'Inter', sans-serif !important; 
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeoNCraf – Serwer Minecraft</title>
+  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+  <style>
+    /* POPRAWKA FONTU: Wymuszenie czcionki 'Minecraft' dla wszystkich elementów */
+    *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+        font-family:'Minecraft', 'Inter', sans-serif !important; 
+    }
 
-    /* Reszta Twoich stylów CSS */
-    :root{--bg1:#1b1f3b;--bg2:#0a0d1a;--text:#fff;--card:rgba(255,255,255,.05)}body.light{--bg1:#f4f6ff;--bg2:#dfe3ff;--text:#000;--card:rgba(0,0,0,.05)}body{background:radial-gradient(circle at top,var(--bg1),var(--bg2));color:var(--text);line-height:1.6;overflow-x:hidden}canvas{position:fixed;inset:0;z-index:-1}header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px}h1{font-size:clamp(3rem,6vw,5rem);font-weight:900;background:linear-gradient(90deg,#6cf,#9f6cff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:float 3s ease-in-out infinite}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}.btns{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}.btn{padding:14px 28px;border-radius:14px;text-decoration:none;font-weight:600;transition:.25s;cursor:pointer}.btn:hover{transform:scale(1.08) rotate(-1deg);box-shadow:0 15px 40px rgba(0,0,0,.4)}.primary{background:linear-gradient(90deg,#6cf,#9f6cff);color:#000}.secondary{border:2px solid #6cf;color:#6cf}section{padding:80px 20px;max-width:1200px;margin:auto}.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px}.card{background:var(--card);border-radius:24px;padding:30px;backdrop-filter:blur(14px);transition:.25s}.card:hover{transform:translateY(-10px) scale(1.03)}.toggle{position:fixed;top:20px;right:20px;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#6cf,#9f6cff);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.4rem;z-index:10}#langToggle{top:80px}.creeper{width:80px;height:80px;margin:40px auto 0;background:linear-gradient(#4caf50,#2e7d32);border-radius:12px;position:relative;animation:walk 3s ease-in-out infinite}.creeper:before,.creeper:after{content:'';position:absolute;background:#000}.creeper:before{width:14px;height:14px;left:18px;top:20px;box-shadow:30px 0 0 #000}.creeper:after{width:18px;height:28px;left:31px;top:40px}@keyframes walk{0%,100%{transform:translateX(0)}50%{transform:translateY(-10px)}}
+    /* Reszta Twoich stylów CSS */
+    :root{--bg1:#1b1f3b;--bg2:#0a0d1a;--text:#fff;--card:rgba(255,255,255,.05)}body.light{--bg1:#f4f6ff;--bg2:#dfe3ff;--text:#000;--card:rgba(0,0,0,.05)}body{background:radial-gradient(circle at top,var(--bg1),var(--bg2));color:var(--text);line-height:1.6;overflow-x:hidden}canvas{position:fixed;inset:0;z-index:-1}header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px}h1{font-size:clamp(3rem,6vw,5rem);font-weight:900;background:linear-gradient(90deg,#6cf,#9f6cff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:float 3s ease-in-out infinite}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}.btns{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}.btn{padding:14px 28px;border-radius:14px;text-decoration:none;font-weight:600;transition:.25s;cursor:pointer}.btn:hover{transform:scale(1.08) rotate(-1deg);box-shadow:0 15px 40px rgba(0,0,0,.4)}.primary{background:linear-gradient(90deg,#6cf,#9f6cff);color:#000}.secondary{border:2px solid #6cf;color:#6cf}section{padding:80px 20px;max-width:1200px;margin:auto}.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px}.card{background:var(--card);border-radius:24px;padding:30px;backdrop-filter:blur(14px);transition:.25s}.card:hover{transform:translateY(-10px) scale(1.03)}.toggle{position:fixed;top:20px;right:20px;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#6cf,#9f6cff);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.4rem;z-index:10}#langToggle{top:80px}.creeper{width:80px;height:80px;margin:40px auto 0;background:linear-gradient(#4caf50,#2e7d32);border-radius:12px;position:relative;animation:walk 3s ease-in-out infinite}.creeper:before,.creeper:after{content:'';position:absolute;background:#000}.creeper:before{width:14px;height:14px;left:18px;top:20px;box-shadow:30px 0 0 #000}.creeper:after{width:18px;height:28px;left:31px;top:40px}@keyframes walk{0%,100%{transform:translateX(0)}50%{transform:translateX(-10px)}}
 
 /* FINALNA POPRAWKA PRELOADERA: Użycie tylko opacity do płynnego zanikania */
 #preloader{
-  position:fixed;
-  inset:0;
-  background:#050816;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
-  font-size:1.2rem;
-  opacity: 1; 
-  transition: opacity 0.5s ease; 
+  position:fixed;
+  inset:0;
+  background:#050816;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  font-size:1.2rem;
+  opacity: 1; 
+  transition: opacity 0.5s ease; 
 }
-#preloader.hidden { 
-  opacity: 0 !important;
+#preloader.hidden { 
+  opacity: 0 !important;
 }
 </style>
 </head>
@@ -43,123 +43,123 @@
 <div class="toggle" onclick="toggleTheme()">🌙</div>
 
 <header>
-  <div style="text-align:center;line-height:1.2">
-  
+  <div style="text-align:center;line-height:1.2">
+  
 </div>
 <p data-pl="Nowoczesny serwer Minecraft nowej generacji." data-en="A modern next-generation Minecraft server.">
-    Nowoczesny serwer Minecraft nowej generacji.
-  </div>
-    <h1 data-pl="NeoNCraf" data-en="NeoNCraf">NeoNCraf</h1>
-  </div>
-  
-  </p>
+    Nowoczesny serwer Minecraft nowej generacji.
+  </div>
+    <h1 data-pl="NeoNCraf" data-en="NeoNCraf">NeoNCraf</h1>
+  </div>
+  
+  </p>
 <div class="btns">
-  <a href="#" id="copyButton" class="btn primary">Skopiuj IP serwera</a>
-  <a href="https://discord.gg/Ty9axmj8" target="_blank" class="btn secondary">Discord</a>
+  <a href="#" id="copyButton" class="btn primary">Skopiuj IP serwera</a>
+  <a href="https://discord.gg/Ty9axmj8" target="_blank" class="btn secondary">Discord</a>
 </div>
-  
-  <p class="ip">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
+  
+  <p class="ip">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
 </header>
 
 <section>
-  <div class="card" style="text-align:center; margin-bottom:40px">
-    <h3 data-pl="📊 Status serwera" data-en="📊 Server status">📊 Status serwera</h3>
-    <p id="status">Sprawdzanie...</p>
-    <p data-pl="👥 Gracze online:" data-en="👥 Players online:">👥 Gracze online:</p>
-    <p><span id="players">-</span></p>
-    <p id="percent">-</p>
-    <div class="creeper"></div>
-  </div>
-  </div>
-  <div class="features">
-    <div class="card">
-      <h3>⚡ Wydajność</h3>
-      <p>Stabilny serwer, niski ping i brak lagów – gramy płynnie 24/7.</p>
-    </div>
-    <div class="card">
-      <h3>🧩 Unikalne tryby</h3>
-      <p>Autorskie systemy, eventy i mechaniki, których nie znajdziesz nigdzie indziej.</p>
-    </div>
-    <div class="card">
-      <h3>👥 Społeczność</h3>
-      <p>Aktywni gracze, pomocna administracja i świetna atmosfera.</p>
-    </div>
-    <div class="card">
-      <h3>🔒 Bezpieczeństwo</h3>
-      <p>Anty-cheat, backupy i ochrona danych graczy.</p>
-    </div>
-  </div>
+  <div class="card" style="text-align:center; margin-bottom:40px">
+    <h3 data-pl="📊 Status serwera" data-en="📊 Server status">📊 Status serwera</h3>
+    <p id="status">Sprawdzanie...</p>
+    <p data-pl="👥 Gracze online:" data-en="👥 Players online:">👥 Gracze online:</p>
+    <p><span id="players">-</span></p>
+    <p id="percent">-</p>
+    <div class="creeper"></div>
+  </div>
+  </div>
+  <div class="features">
+    <div class="card">
+      <h3>⚡ Wydajność</h3>
+      <p>Stabilny serwer, niski ping i brak lagów – gramy płynnie 24/7.</p>
+    </div>
+    <div class="card">
+      <h3>🧩 Unikalne tryby</h3>
+      <p>Autorskie systemy, eventy i mechaniki, których nie znajdziesz nigdzie indziej.</p>
+    </div>
+    <div class="card">
+      <h3>👥 Społeczność</h3>
+      <p>Aktywni gracze, pomocna administracja i świetna atmosfera.</p>
+    </div>
+    <div class="card">
+      <h3>🔒 Bezpieczeństwo</h3>
+      <p>Anty-cheat, backupy i ochrona danych graczy.</p>
+    </div>
+  </div>
 </section>
 
 <footer>
-  © 2025 NeoNCraf • Serwer Minecraft
+  © 2025 NeoNCraf • Serwer Minecraft
 </footer>
 
 <script>
 window.addEventListener('load', function() {
-    const p = document.getElementById('preloader');
-    if (p) {
-        // Opóźnienie ukrycia o 3000 ms (3 sekundy) od momentu pełnego załadowania strony
-        setTimeout(() => {
-            p.classList.add('hidden'); 
-            
-            setTimeout(() => {
-                p.style.display = 'none';
-            }, 500); 
+    const p = document.getElementById('preloader');
+    if (p) {
+        // Opóźnienie ukrycia o 3000 ms (3 sekundy) od momentu pełnego załadowania strony
+        setTimeout(() => {
+            p.classList.add('hidden'); 
+            
+            setTimeout(() => {
+                p.style.display = 'none';
+            }, 500); 
 
-        }, 3000); 
-    }
+        }, 3000); 
+    }
 });
 </script>
 
 <script>
 window.addEventListener('load', function() {
-    // Działająca funkcja do kopiowania IP
-    const copyButton = document.getElementById('copyButton');
-    if (copyButton) {
-        copyButton.addEventListener('click', function(event) {
-            event.preventDefault(); 
-            
-            const ip = document.getElementById('ip').innerText;
-            
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(ip)
-                    .then(() => {
-                        alert('✅ IP skopiowane: ' + ip + ' (Metoda nowa)');
-                    })
-                    .catch(err => {
-                        fallbackCopy(ip);
-                    });
-            } else {
-                fallbackCopy(ip);
-            }
+    // Działająca funkcja do kopiowania IP
+    const copyButton = document.getElementById('copyButton');
+    if (copyButton) {
+        copyButton.addEventListener('click', function(event) {
+            event.preventDefault(); 
+            
+            const ip = document.getElementById('ip').innerText;
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(ip)
+                    .then(() => {
+                        alert('✅ IP skopiowane: ' + ip + ' (Metoda nowa)');
+                    })
+                    .catch(err => {
+                        fallbackCopy(ip);
+                    });
+            } else {
+                fallbackCopy(ip);
+            }
 
-            function fallbackCopy(text) {
-                const tempInput = document.createElement('textarea');
-                tempInput.value = text;
-                tempInput.style.position = 'fixed';
-                tempInput.style.opacity = '0';
-                document.body.appendChild(tempInput);
-                
-                tempInput.select();
-                tempInput.setSelectionRange(0, 99999);
-                
-                try {
-                    const successful = document.execCommand('copy');
-                    if (successful) {
-                        alert('✅ IP Servera skopiowane IP to: ' + text + ' ()'); 
-                    } else {
-                        alert('❌ Nie udało się skopiować IP. Wciśnij Ctrl+C/Cmd+C: ' + text);
-                    }
-                } catch (err) {
-                    alert('❌ Błąd kopiowania. Spróbuj ręcznie: ' + text);
-                }
-                
-                document.body.removeChild(tempInput);
-            }
-        });
-    }
-}); 
+            function fallbackCopy(text) {
+                const tempInput = document.createElement('textarea');
+                tempInput.value = text;
+                tempInput.style.position = 'fixed';
+                tempInput.style.opacity = '0';
+                document.body.appendChild(tempInput);
+                
+                tempInput.select();
+                tempInput.setSelectionRange(0, 99999);
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        alert('✅ IP Servera skopiowane IP to: ' + text + ' ()'); 
+                    } else {
+                        alert('❌ Nie udało się skopiować IP. Wciśnij Ctrl+C/Cmd+C: ' + text);
+                    }
+                } catch (err) {
+                    alert('❌ Błąd kopiowania. Spróbuj ręcznie: ' + text);
+                }
+                
+                document.body.removeChild(tempInput);
+            }
+        });
+    }
+}); 
 
 
 function toggleTheme(){ document.body.classList.toggle('light'); }
@@ -170,106 +170,80 @@ function resize(){c.width=innerWidth;c.height=innerHeight} resize(); onresize=re
 let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
 function anim(){ x.clearRect(0,0,c.width,c.height); p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0}); requestAnimationFrame(anim)} anim();
 
-// MC server status - OSTATECZNA, EKSTREMALNIE UPROSZCZONA LOGIKA
-let lastOnline = undefined; 
+// MC server status - ZAKTUALIZOWANE DLA POPRAWNEJ DETEKCJI OFFLINE
+let lastOnline=null;
 function fetchStatus(){
-  console.log('Sprawdzanie statusu serwera (mcstatus.io - prosta logika)...');
-  // Powrót do mcstatus.io
-  fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
-    .then(r => {
-      // Jeśli błąd sieci/API, skocz do .catch
-      if (!r.ok) {
-        console.error('Błąd HTTP z mcstatus.io:', r.status, r.statusText);
-        throw new Error('Błąd HTTP: ' + r.status);
-      }
-      return r.json();
-    })
-    .then(d=>{
-      // Ustawienie bezpiecznych domyślnych wartości
-      const isOnlineFromAPI = d.online === true;
-      const onlinePlayers = d.players?.online ?? 0;
-      const maxPlayers = d.players?.max ?? 0;
-      
-      let statusDisplay;
-      let currentStatus; // true = gotowy do gry, false = w lobby/offline
-
-      if (isOnlineFromAPI) {
-          // Serwer w pełni odpowiada (ONLINE)
-          statusDisplay = '🟢 ONLINE';
-          currentStatus = true;
-      } else { 
-          // Serwer zwrócił odpowiedź, ale online: false (to jest CZEKANIE Aternos)
-          statusDisplay = '🟡 CZEKANIE (LOBBY)';
-          currentStatus = false;
-      }
-
-      // Aktualizacja DOM
-      document.getElementById('status').innerText = statusDisplay;
-      document.getElementById('players').innerText = onlinePlayers + ' / ' + maxPlayers;
-      document.getElementById('percent').innerText = maxPlayers ? ('📊 ' + Math.round((onlinePlayers / maxPlayers) * 100) + '%') : '';
-      
-      // Logika Webhooka: Wysyłanie tylko przy ZMIANIE STANU
-      if(lastOnline === undefined) {
-        lastOnline = currentStatus;
-        return; 
-      }
-      
-      if(lastOnline !== currentStatus) {
-        if (currentStatus) {
-            sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony i jest gotowy do gry!');
-        } else {
-            sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer wszedł w tryb oczekiwania (LOBBY) lub został wyłączony.');
-        }
-        lastOnline = currentStatus; // Aktualizujemy stan po wysłaniu powiadomienia
-      }
-    })
-    .catch(e=>{
-      console.error('Błąd połączenia z API (Prawdziwy OFF):', e);
-      // Jeśli błąd, to znaczy, że serwer jest niedostępny lub błąd sieci
-      document.getElementById('status').innerText='🔴 OFFLINE'; 
-      if (lastOnline !== false && lastOnline !== undefined) {
-          sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony lub wystąpił błąd API.');
+  console.log('Sprawdzanie statusu serwera...');
+  fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
+    .then(r => {
+      if (!r.ok) {
+        console.error('Błąd HTTP z mcstatus.io:', r.status, r.statusText);
+        throw new Error('Błąd HTTP: ' + r.status);
       }
-      lastOnline = false;
-      document.getElementById('players').innerText='-';
-      document.getElementById('percent').innerText='';
-    });
+      return r.json();
+    })
+    .then(d=>{
+      // KLUCZOWA ZMIANA LOGIKI: Sprawdzenie pola 'online'
+      const isOnline = d.online === true; 
+      const online=d.players?.online ?? 0;
+      const max=d.players?.max ?? 0;
+      
+      document.getElementById('status').innerText = isOnline ? '🟢 ONLINE' : '🔴 OFFLINE';
+      document.getElementById('players').innerText = online + ' / ' + max;
+      document.getElementById('percent').innerText = max ? ('📊 ' + Math.round((online / max) * 100) + '%') : '';
+      
+      console.log('Status serwera: ' + (isOnline ? 'Online' : 'Offline') + '. Gracze: ' + online);
+      
+      // Logika Webhooka
+      if(lastOnline===null){lastOnline=isOnline;return}
+      if(!lastOnline && isOnline)sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony');
+      if(lastOnline && !isOnline)sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony');
+      lastOnline=isOnline;
+    })
+    .catch(e=>{
+      console.error('Błąd pobierania statusu serwera (sieć lub API):', e);
+      document.getElementById('status').innerText='⚠️ API OFFLINE';
+      document.getElementById('players').innerText='-';
+      document.getElementById('percent').innerText='';
+    });
 }
 fetchStatus();
 setInterval(fetchStatus,1000);
 
 /**
- * FUNKCJA sendDiscord
- */
+ * FUNKCJA sendDiscord
+ * Używa URL, który podałeś. Jeśli powiadomienia nie dochodzą, ten URL
+ * jest prawdopodobnie nieaktywny lub skasowany.
+ */
 function sendDiscord(msg){
-  // URL podany przez Ciebie:
-  const webhook = 'https://discordapp.com/api/webhooks/1450217665359642624/X9P7XIyJtZvQ7Ncqi0tn0_C3Qh4caj4S2gpB6Wm99lc4q8hZXgdEpkdD5wwoPz1jys6e'; 
+  // URL podany przez Ciebie:
+  const webhook = 'https://discordapp.com/api/webhooks/1450217665359642624/X9P7XIyJtZvQ7Ncqi0tn0_C3Qh4caj4S2gpB6Wm99lc4q8hZXgdEpkdD5wwoPz1jys6e'; 
 
-  fetch(webhook, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ content: msg })
-  })
-  .then(response => {
-      if (!response.ok) {
-          console.error('Błąd wysyłania webhooka. Prawdopodobnie URL jest nieaktywny lub skasowany (status: ' + response.status + ').', response.statusText);
-      }
-  })
-  .catch(error => {
-      console.error('Błąd połączenia webhooka (sieć):', error);
-  });
+  fetch(webhook, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content: msg })
+  })
+  .then(response => {
+      if (!response.ok) {
+          console.error('Błąd wysyłania webhooka. Prawdopodobnie URL jest nieaktywny lub skasowany (status: ' + response.status + ').', response.statusText);
+      }
+  })
+  .catch(error => {
+      console.error('Błąd połączenia webhooka (sieć):', error);
+  });
 }
 
 // language
 let lang = navigator.language && navigator.language.startsWith('pl') ? 'pl' : 'en';
 function toggleLang(){
-  lang = lang==='pl'?'en':'pl';
-  applyLang();
+  lang = lang==='pl'?'en':'pl';
+  applyLang();
 }
 function applyLang(){
-  document.querySelectorAll('[data-pl]').forEach(e=>{
-    e.innerText = e.dataset[lang];
-  });
+  document.querySelectorAll('[data-pl]').forEach(e=>{
+    e.innerText = e.dataset[lang];
+  });
 }
 applyLang();
 </script>
