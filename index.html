@@ -6,35 +6,35 @@
     <title>NeoNCraf – Serwer Minecraft</title>
     <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
     <style>
-        /* --- UJEDNOLICONA SEKCJA STYLÓW Z WZORCA --- */
+        /* --- STYLIZACJA POD WZÓR Z ZRZUTÓW EKRANU --- */
         
         *{
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            /* Używamy !important, aby wymusić czcionkę, co jest częstą przyczyną problemu */
+            /* Wymuszenie czcionki */
             font-family: 'Minecraft', 'Inter', sans-serif !important; 
         }
 
-        /* Zmienne kolorów (Motyw Ciemny/Jasny) */
+        /* Zmienne kolorów */
         :root{
             --bg1:#1b1f3b; 
             --bg2:#0a0d1a; 
             --text:#fff;
-            --card:rgba(255,255,255,.05); /* Prawie nieprzezroczysty biały dla ciemnego tła */
-            --primary-color: #6cf; /* Niebieski */
-            --secondary-color: #9f6cff; /* Fioletowy */
+            --card:rgba(255,255,255,.05); 
+            --primary-color: #6cf; 
+            --secondary-color: #9f6cff; 
         }
         body.light{
             --bg1:#f4f6ff; 
             --bg2:#dfe3ff; 
             --text:#000;
-            --card:rgba(0,0,0,.05); /* Prawie nieprzezroczysty czarny dla jasnego tła */
+            --card:rgba(0,0,0,.05); 
         }
 
         /* Ogólne style body */
         body{
-            /* Główne tło */
+            /* Gradient tła (ciemny) */
             background: radial-gradient(circle at top, var(--bg1), var(--bg2));
             color: var(--text);
             line-height: 1.6;
@@ -79,7 +79,7 @@
             opacity: 0.8;
         }
 
-        /* Przyciski - kontener Flexbox */
+        /* Przyciski */
         .btns{ 
             display: flex; 
             gap: 20px; 
@@ -87,8 +87,6 @@
             justify-content: center; 
             margin-bottom: 25px;
         }
-        
-        /* Ogólny styl przycisku */
         .btn{
             padding: 14px 28px;
             border-radius: 14px;
@@ -102,16 +100,14 @@
             transform: scale(1.08) rotate(-1deg);
             box-shadow: 0 15px 40px rgba(0,0,0,.4);
         }
-        /* Styl dla głównego przycisku (Kopiuj IP) */
         .primary{ 
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); 
-            color: #000; /* Czarny tekst na jasnym gradiencie */
+            color: #000; 
         }
-        /* Styl dla drugiego przycisku (Discord) */
         .secondary{ 
             border: 2px solid var(--primary-color); 
             color: var(--primary-color); 
-            background: none; /* Przezroczyste tło */
+            background: none; 
         }
         
         /* Styl wyświetlania IP */
@@ -125,7 +121,7 @@
         section{ 
             padding: 40px 20px 80px; 
             max-width: 1200px; 
-            margin: auto; 
+            margin: auto; /* WYŚRODKOWANIE SEKCJI */
         }
         
         /* Główne okno statusu (Centralna Karta) */
@@ -150,7 +146,7 @@
              margin-bottom: 20px;
         }
         
-        /* Kontener na 4 karty z funkcjami */
+        /* Kontener na 4 karty z funkcjami - GRID */
         .features{ 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
@@ -174,7 +170,7 @@
             box-shadow: 0 10px 20px rgba(0,0,0,.3);
         }
         
-        /* Toggle (Przełączniki) - Motyw i Język */
+        /* Toggle (Przełączniki) */
         .toggle{
             position: fixed;
             top: 20px;
@@ -313,8 +309,7 @@
 window.addEventListener('load', function() {
     const p = document.getElementById('preloader');
     if (p) {
-        // Czas musi być dłuższy, aby zobaczyć efekt. 
-        setTimeout(() => {
+        setTimeout(() => {
             p.classList.add('hidden'); 
             setTimeout(() => {
                 p.style.display = 'none';
@@ -393,20 +388,18 @@ function fetchStatus(){
       const onlinePlayers = d.players?.online ?? 0;
       const maxPlayers = d.players?.max ?? 0;
 
-      // --- 🥇 IMPLEMENTACJA USTALONEJ LOGIKI ---
+      // --- IMPLEMENTACJA USTALONEJ LOGIKI ---
 
-      // 1. Priorytet 1: MOTD zawiera "offline" -> Wymuszenie OFFLINE (online: false)
+      // 1. Priorytet 1: MOTD zawiera "offline" -> Wymuszenie OFFLINE 
       if (motdText.includes("offline")) {
           statusDisplay = '🟡 OFFLINE (Wymuszone komunikat.)';
           currentStatus = 'motd_offline';
-          // Zerowanie graczy
           document.getElementById('players').innerText = '0 / 0';
           document.getElementById('percent').innerText = '📊 0%';
 
       } 
-      // 2. Priorytet 2 i 3: MOTD nie zawiera "offline" -> Wymuszenie ONLINE (online: true)
+      // 2. MOTD nie zawiera "offline" -> Wymuszenie ONLINE 
       else {
-          // To obejmuje zarówno API online: true, jak i API online: false (Wyjątek Aternos)
           statusDisplay = '🟢 ONLINE';
           currentStatus = 'online';
           
@@ -489,7 +482,6 @@ function applyLang(){
   document.querySelectorAll('[data-pl]').forEach(e=>{
     const newText = e.dataset[lang];
     if (e.tagName === 'A' || e.tagName === 'H1' || e.tagName === 'H3' || e.tagName === 'P') {
-        // Dla tych tagów, nadpisujemy całą zawartość
         e.innerText = newText;
     }
   });
