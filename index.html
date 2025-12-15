@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8" />
@@ -114,9 +114,13 @@
         
         /* Sekcje z funkcjami */
         section{ 
+            /* Ustawienie sekcji na 100% szerokości i centrowanie jej zawartości */
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
             padding: 40px 20px 80px; 
-            max-width: 1200px; /* Maksymalna szerokość kontenera kart */
-            margin: auto; /* Centrowanie sekcji kart */
+            max-width: 100%; /* Umożliwia zajęcie całej szerokości */
+            margin: auto; 
         }
         
         /* Karta Statusu */
@@ -131,16 +135,26 @@
             box-shadow: 0 10px 30px rgba(0,0,0,.3);
         }
 
-        /* Kontener na 4 karty z funkcjami - GRID (dla układu od lewej do prawej) */
+        /* Kontener na 4 karty z funkcjami - WYMUSZENIE FLEXBOX */
         .features{ 
-            display: grid; 
-            /* Umożliwia ułożenie 4 kart obok siebie (lub mniej, jeśli ekran jest za wąski) */
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            display: flex; 
+            justify-content: center; /* Centruje cały rząd kart */
             gap: 30px; 
+            width: 100%; 
+            max-width: 1200px; /* Maksymalna szerokość rzędu */
+            
+            /* KLUCZOWE ZMIANY: wymuszenie 4 kart obok siebie */
+            flex-wrap: nowrap; /* NIE ZAWYJAJ KART NA MNIEJSZE EKRANY */
+            overflow-x: auto; /* Dodaj przewijanie, jeśli jest za mało miejsca */
+            padding-bottom: 10px; /* Dodatkowe miejsce dla paska przewijania na małych ekranach */
         }
         
         /* Styl pojedynczej karty funkcji */
         .card{
+            /* Zapewniamy, że każda karta ma sztywną minimalną szerokość, aby się zmieściły */
+            min-width: 250px; 
+            flex-shrink: 0; /* Zapobiega zmniejszaniu się kart */
+            
             background: var(--card);
             border-radius: 24px;
             padding: 30px;
@@ -155,6 +169,18 @@
             transform: translateY(-10px) scale(1.03); 
             box-shadow: 0 10px 20px rgba(0,0,0,.3);
         }
+        
+        /* Media Query - Przywrócenie łamania dla bardzo małych telefonów */
+        @media (max-width: 600px) {
+            .features {
+                flex-wrap: wrap; /* Pozwól kartom łamać się na małych ekranach */
+            }
+            .card {
+                min-width: 100%; /* Karta zajmuje całą szerokość na telefonie */
+            }
+        }
+
+        /* Pozostałe style (bez zmian) */
         
         /* Toggle (Przełączniki) */
         .toggle{
@@ -174,7 +200,7 @@
         }
         #langToggle{ top: 70px; }
         
-        /* Creeper - styl z poprzednich wersji */
+        /* Creeper */
         .creeper{
             width: 80px;
             height: 80px;
