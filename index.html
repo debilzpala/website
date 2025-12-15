@@ -397,7 +397,7 @@ let lastStatus = undefined;
 function fetchStatus(){
   console.log('Sprawdzanie statusu serwera (Ostateczna logika Aternos/MOTD)...');
   // Używamy API mcstatus.io
-  fetch('https://api.mcstatus.io/v2/status/java/NeoNCraf_Mc.aternos.me:34490')
+  fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
     .then(r => {
       if (!r.ok) {
         console.error('Błąd HTTP z mcstatus.io:', r.status, r.statusText);
@@ -418,7 +418,7 @@ function fetchStatus(){
 
       // 1. Priorytet 1: MOTD zawiera "offline" -> Wymuszenie OFFLINE 
       if (motdText.includes("offline")) {
-          statusDisplay = ' OFFLINE ';
+          statusDisplay = '🟡 OFFLINE (Wymuszone komunikat.)';
           currentStatus = 'motd_offline';
           document.getElementById('players').innerText = '0 / 0';
           document.getElementById('percent').innerText = '📊 0%';
@@ -447,7 +447,7 @@ function fetchStatus(){
         if (currentStatus === 'online') {
             sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer jest dostępny do gry (Status: API true LUB Wyjątek Aternos).');
         } else if (currentStatus === 'motd_offline') {
-            sendDiscord('🔴 **NeoNCraf OFFLINE)**\nStatus został zmieniony przez MOTD. Serwer w trakcie konserwacji/wyłączania.');
+            sendDiscord('🟡 **NeoNCraf OFFLINE (Komunikat)**\nStatus został zmieniony przez MOTD. Serwer w trakcie konserwacji/wyłączania.');
         }
         lastStatus = currentStatus; // Zapisz nowy stan
       }
@@ -456,7 +456,7 @@ function fetchStatus(){
       console.error('Błąd połączenia z API (Prawdziwy OFF):', e);
       // Prawdziwy OFFLINE
       const currentStatus = 'error_offline';
-      document.getElementById('status').innerText='🔴 OFFLINE (Błąd)'; 
+      document.getElementById('status').innerText='🔴 OFFLINE (Błąd API)'; 
       
       // Wysyłamy webhooka tylko jeśli ostatni znany stan to nie był offline
       if (lastStatus !== currentStatus && lastStatus !== undefined) {
