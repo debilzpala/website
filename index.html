@@ -12,7 +12,6 @@
 <canvas id="particles"></canvas>
 <div id="themeToggle" class="toggle" onclick="toggleTheme()">🌙</div>
 <div id="langToggle" class="toggle" style="top:80px" onclick="toggleLang()">🌍</div>
-<canvas id="particles"></canvas>
 <div class="toggle" onclick="toggleTheme()">🌙</div>
 
 <header>
@@ -68,14 +67,12 @@
   © 2025 NeoNCraf • Serwer Minecraft
 </footer>
 
-
 <script>
 window.addEventListener('load',()=>{
     const p=document.getElementById('preloader');
     if(p){ p.style.display='none'; }
   });
-</script>
-<script>
+
   function toggleTheme(){ document.body.classList.toggle('light'); }
 
   // particles
@@ -96,10 +93,8 @@ window.addEventListener('load',()=>{
         document.getElementById('players').innerText=online+' / '+max;
         document.getElementById('percent').innerText=max?('📊 '+Math.round((online/max)*100)+'%'):'';
         if(lastOnline===null){lastOnline=d.online;return}
-        if(!lastOnline&&d.online)sendDiscord('🟢 **NeoNCraf ONLINE**
-Serwer został uruchomiony');
-        if(lastOnline&& !d.online)sendDiscord('🔴 **NeoNCraf OFFLINE**
-Serwer został wyłączony');
+        if(!lastOnline&&d.online)sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony');
+        if(lastOnline&& !d.online)sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony');
         lastOnline=d.online;
       })
       .catch(()=>{
@@ -129,8 +124,8 @@ Serwer został wyłączony');
     });
   }
   applyLang();
-
-  // POPRAWKA 2: Nowa funkcja do kopiowania IP (podpięta do id="copyButton")
+  
+  // POPRAWKA 2: Działająca funkcja do kopiowania IP
   document.getElementById('copyButton').addEventListener('click', function(event) {
     event.preventDefault(); // Zapobiega przeładowaniu strony
     const ipElement = document.getElementById('ip');
@@ -141,11 +136,12 @@ Serwer został wyłączony');
       // Potwierdzenie skopiowania
       alert('✅ IP skopiowane: ' + ip); 
     }).catch(err => {
-      // Obsługa błędów, jeśli przeglądarka blokuje dostęp
+      // Obsługa błędu
       console.error('Błąd kopiowania:', err);
       alert('❌ Nie udało się skopiować IP. Spróbuj ręcznie: ' + ip);
     });
   });
+
 </script>
 </body>
 </html>
