@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8" />
@@ -41,10 +41,9 @@
             overflow-x: hidden;
             transition: background 0.5s ease, color 0.5s ease;
         }
-        /* Cząsteczki w tle */
         canvas{ position: fixed; inset: 0; z-index: -1; }
         
-        /* Sekcja Header - Główny kontener na środku ekranu */
+        /* Sekcja Header - Całość wyśrodkowana na środku ekranu */
         header{
             min-height: 100vh;
             display: flex;
@@ -55,12 +54,10 @@
             padding: 40px 20px;
         }
         
-        /* Styl dla głównego nagłówka "NeoNCraf" */
         h1{
             font-size: clamp(3rem, 7vw, 6rem);
             font-weight: 900;
             margin: 10px 0 25px;
-            /* Gradient tekstu */
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -71,7 +68,6 @@
             50%{ transform: translateY(-10px); }
         }
 
-        /* Nagłówek opisujący serwer */
         header p:first-of-type {
             font-size: 1.1rem;
             text-transform: uppercase;
@@ -79,7 +75,7 @@
             opacity: 0.8;
         }
 
-        /* Przyciski */
+        /* Przyciski w jednej linii (Flex) */
         .btns{ 
             display: flex; 
             gap: 20px; 
@@ -110,7 +106,6 @@
             background: none; 
         }
         
-        /* Styl wyświetlania IP */
         .ip {
             font-size: 1.2rem;
             color: var(--secondary-color);
@@ -120,14 +115,14 @@
         /* Sekcje z funkcjami */
         section{ 
             padding: 40px 20px 80px; 
-            max-width: 1200px; 
-            margin: auto; /* WYŚRODKOWANIE SEKCJI */
+            max-width: 1200px; /* Maksymalna szerokość kontenera kart */
+            margin: auto; /* Centrowanie sekcji kart */
         }
         
-        /* Główne okno statusu (Centralna Karta) */
+        /* Karta Statusu */
         #status-container {
             width: clamp(300px, 80%, 400px);
-            margin: 0 auto 60px; /* Centrowanie + odstęp */
+            margin: 0 auto 60px; 
             text-align: center;
             padding: 30px;
             background: var(--card); 
@@ -136,19 +131,10 @@
             box-shadow: 0 10px 30px rgba(0,0,0,.3);
         }
 
-        #status-container h3 {
-             margin-bottom: 15px;
-        }
-
-        #status-container #status {
-             font-size: 1.1rem;
-             font-weight: bold;
-             margin-bottom: 20px;
-        }
-        
-        /* Kontener na 4 karty z funkcjami - GRID */
+        /* Kontener na 4 karty z funkcjami - GRID (dla układu od lewej do prawej) */
         .features{ 
             display: grid; 
+            /* Umożliwia ułożenie 4 kart obok siebie (lub mniej, jeśli ekran jest za wąski) */
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
             gap: 30px; 
         }
@@ -188,7 +174,7 @@
         }
         #langToggle{ top: 70px; }
         
-        /* Creeper */
+        /* Creeper - styl z poprzednich wersji */
         .creeper{
             width: 80px;
             height: 80px;
@@ -278,7 +264,7 @@
     <div class="creeper"></div>
   </div>
   
-  <div class="features">
+    <div class="features">
     <div class="card">
       <h3 data-pl="⚡ WYDAJNOŚĆ" data-en="⚡ PERFORMANCE">⚡ WYDAJNOŚĆ</h3>
       <p data-pl="Stabilny serwer, niski ping i brak lagów – gramy płynnie 24/7." data-en="Stable server, low ping, and no lag – smooth gaming 24/7.">Stabilny serwer, niski ping i brak lagów – gramy płynnie 24/7.</p>
@@ -303,7 +289,7 @@
 </footer>
 
 <script>
-// --- GLOBALNE ZMIENNE I FUNKCJE ---
+// --- LOGIKA JAVASCRIPT ---
 
 // Preloader
 window.addEventListener('load', function() {
