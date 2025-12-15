@@ -170,7 +170,7 @@ function resize(){c.width=innerWidth;c.height=innerHeight} resize(); onresize=re
 let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
 function anim(){ x.clearRect(0,0,c.width,c.height); p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0}); requestAnimationFrame(anim)} anim();
 
-// MC server status - ZAKTUALIZOWANE DLA POPRAWNEJ DETEKCJI OFFLINE
+// MC server status - ZAKTUALIZOWANE DLA OBSŁUGI LOBBY ATERNOS
 let lastOnline=null;
 function fetchStatus(){
   console.log('Sprawdzanie statusu serwera...');
@@ -183,26 +183,40 @@ function fetchStatus(){
       return r.json();
     })
     .then(d=>{
-      // KLUCZOWA ZMIANA LOGIKI: Sprawdzenie pola 'online'
-      const isOnline = d.online === true; 
+      const motdText = (d.motd?.clean ?? '').toLowerCase();
+      // Sprawdza, czy w tekście MOTD (wiadomości dnia) jest fraza sugerująca tryb "offline/lobby Aternos"
+      const isAternosLobby = motdText.includes('offline') || motdText.includes('lobby') || motdText.includes('waiting');
+
+      const isOnline = d.online === true && !isAternosLobby; // Prawdziwy online tylko, jeśli API zwraca online I nie ma frazy 'offline/lobby' w MOTD
+      
       const online=d.players?.online ?? 0;
       const max=d.players?.max ?? 0;
-      
-      document.getElementById('status').innerText = isOnline ? '🟢 ONLINE' : '🔴 OFFLINE';
+
+      // Wyświetlanie statusu
+      let statusDisplay;
+      if (isOnline) {
+          statusDisplay = '🟢 ONLINE';
+      } else if (d.online && isAternosLobby) {
+          statusDisplay = '🟡 CZEKANIE (LOBBY)';
+      } else {
+          statusDisplay = '🔴 OFFLINE';
+      }
+
+      document.getElementById('status').innerText = statusDisplay;
       document.getElementById('players').innerText = online + ' / ' + max;
       document.getElementById('percent').innerText = max ? ('📊 ' + Math.round((online / max) * 100) + '%') : '';
       
-      console.log('Status serwera: ' + (isOnline ? 'Online' : 'Offline') + '. Gracze: ' + online);
+      console.log('Status serwera: ' + statusDisplay + '. Gracze: ' + online);
       
-      // Logika Webhooka
+      // Logika Webhooka: bazuje na stanie isOnline (prawdziwy stan gry, a nie lobby)
       if(lastOnline===null){lastOnline=isOnline;return}
-      if(!lastOnline && isOnline)sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony');
-      if(lastOnline && !isOnline)sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony');
+      if(!lastOnline && isOnline)sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony i jest gotowy do gry!');
+      if(lastOnline && !isOnline)sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony lub wszedł w tryb oczekiwania (LOBBY).');
       lastOnline=isOnline;
     })
     .catch(e=>{
       console.error('Błąd pobierania statusu serwera (sieć lub API):', e);
-      document.getElementById('status').innerText='⚠️ API OFFLINE';
+      document.getElementById('status').innerText='⚠️ BŁĄD API'; // Zmieniono na BŁĄD API
       document.getElementById('players').innerText='-';
       document.getElementById('percent').innerText='';
     });
