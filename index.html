@@ -68,22 +68,16 @@
 </footer>
 
 <script>
-// *** NOWA, PROSTA FUNKCJA DO UKRYWANIA PRELOADERA ***
-// Używamy DOMContentLoaded, aby upewnić się, że to zadziała szybko
-document.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('load', function() {
     const p = document.getElementById('preloader');
     if (p) {
-        // Dodatkowe opóźnienie, by użytkownik zobaczył ładowanie, ale nie jest to konieczne
-        setTimeout(() => {
-            p.style.display = 'none';
-        }, 100); 
+        p.style.display = 'none';
     }
 });
-// ************************************************
+</script>
 
+<script>
 window.addEventListener('load', function() {
-    // Od tego miejsca startuje złożona reszta logiki, która nie blokuje preloader'a
-    
     // Działająca funkcja do kopiowania IP
     const copyButton = document.getElementById('copyButton');
     if (copyButton) {
@@ -130,7 +124,7 @@ window.addEventListener('load', function() {
             }
         });
     }
-}); // Koniec window.addEventListener('load')
+}); // Koniec window.addEventListener('load') głównej logiki
 
 
 function toggleTheme(){ document.body.classList.toggle('light'); }
