@@ -1,14 +1,3 @@
-Przygotowałem dla Ciebie cały poprawiony kod.
-
-**WAŻNA UWAGA:** URL, który podałeś (`https://discordapp.com/api/webhooks/1450217665359642624/...`), to jest ten sam, który był w pliku i który najprawdopodobniej **nie działa** (został usunięty lub wygasł). Aby naprawa była skuteczna, musisz **wygenerować zupełnie nowy URL Webhooka** w ustawieniach Twojego serwera Discord i wkleić go w to miejsce.
-
-W poniższym kodzie **wkleiłem URL, który mi podałeś**, ale dodałem komentarz, abyś wiedział, że to jest potencjalne źródło problemu. Dodałem też logowanie błędów, które pomoże zdiagnozować, czy to na pewno wina nieaktywnego URL.
-
-## 🛠️ Poprawiony Kod HTML (`index (1).html`)
-
-Proszę, zastąp całą zawartość swojego pliku `index (1).html` poniższym kodem.
-
-```html
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -185,23 +174,36 @@ function resize(){c.width=innerWidth;c.height=innerHeight} resize(); onresize=re
 let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
 function anim(){ x.clearRect(0,0,c.width,c.height); p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0}); requestAnimationFrame(anim)} anim();
 
-// MC server status
+// MC server status - ZAKTUALIZOWANE W CELU DIAGNOSTYKI BŁĘDÓW API
 let lastOnline=null;
 function fetchStatus(){
+  console.log('Sprawdzanie statusu serwera...');
   fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
-    .then(r=>r.json())
+    .then(r => {
+      if (!r.ok) {
+        // Logowanie, jeśli odpowiedź jest, ale jest błędem HTTP (np. 500)
+        console.error('Błąd HTTP z mcstatus.io:', r.status, r.statusText);
+        throw new Error('Błąd HTTP: ' + r.status);
+      }
+      return r.json();
+    })
     .then(d=>{
+      console.log('Status serwera: sukces', d.online ? 'Online' : 'Offline');
       const online=d.players?.online ?? 0;
       const max=d.players?.max ?? 0;
       document.getElementById('status').innerText=d.online?'🟢 ONLINE':'🔴 OFFLINE';
       document.getElementById('players').innerText=online+' / '+max;
       document.getElementById('percent').innerText=max?('📊 '+Math.round((online/max)*100)+'%'):'';
+      
+      // Logika wysyłania Discorda (pozostawiona z Twoim URL)
       if(lastOnline===null){lastOnline=d.online;return}
       if(!lastOnline&&d.online)sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony');
       if(lastOnline&& !d.online)sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony');
       lastOnline=d.online;
     })
-    .catch(()=>{
+    .catch(e=>{
+      // Logowanie dla błędów sieci/połączenia
+      console.error('Błąd pobierania statusu serwera (sieć lub inne):', e);
       document.getElementById('status').innerText='⚠️ API OFFLINE';
       document.getElementById('players').innerText='-';
       document.getElementById('percent').innerText='';
@@ -211,13 +213,12 @@ fetchStatus();
 setInterval(fetchStatus,1000);
 
 /**
- * ZAKTUALIZOWANA FUNKCJA sendDiscord
- * UWAGA: Został wklejony URL, który podałeś, ale który jest prawdopodobnie nieaktywny.
- * Jeżeli Webhook nadal nie działa, MUSISZ wygenerować nowy URL Webhooka w ustawieniach Discorda
- * i podmienić go poniżej.
+ * FUNKCJA sendDiscord
+ * Używa URL, który podałeś. Jeśli powiadomienia nie dochodzą, ten URL
+ * jest prawdopodobnie nieaktywny lub skasowany.
  */
 function sendDiscord(msg){
-  // URL podany przez Ciebie (prawdopodobnie nieaktywny):
+  // URL podany przez Ciebie:
   const webhook = 'https://discordapp.com/api/webhooks/1450217665359642624/X9P7XIyJtZvQ7Ncqi0tn0_C3Qh4caj4S2gpB6Wm99lc4q8hZXgdEpkdD5wwoPz1jys6e'; 
 
   fetch(webhook, {
@@ -227,12 +228,12 @@ function sendDiscord(msg){
   })
   .then(response => {
       if (!response.ok) {
-          // Jeśli Discord zwraca błąd (np. 404 Not Found), to znaczy, że URL jest nieaktywny
+          // Zgłasza błąd w konsoli (np. 404), jeśli webhook jest nieaktywny
           console.error('Błąd wysyłania webhooka. Prawdopodobnie URL jest nieaktywny lub skasowany (status: ' + response.status + ').', response.statusText);
       }
   })
   .catch(error => {
-      console.error('Błąd połączenia webhooka:', error);
+      console.error('Błąd połączenia webhooka (sieć):', error);
   });
 }
 
@@ -251,4 +252,3 @@ applyLang();
 </script>
 </body>
 </html>
-```
