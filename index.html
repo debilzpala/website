@@ -38,7 +38,7 @@
             background: radial-gradient(circle at top, var(--bg1), var(--bg2));
             color: var(--text);
             line-height: 1.6;
-            overflow-x: hidden;
+            /* Usunięto overflow-x: hidden, aby widoczny był pasek przewijania poziomego */
             transition: background 0.5s ease, color 0.5s ease;
         }
         canvas{ position: fixed; inset: 0; z-index: -1; }
@@ -114,12 +114,11 @@
         
         /* Sekcje z funkcjami */
         section{ 
-            /* Ustawienie sekcji na 100% szerokości i centrowanie jej zawartości */
             display: flex;
             flex-direction: column;
             align-items: center; 
             padding: 40px 20px 80px; 
-            max-width: 100%; /* Umożliwia zajęcie całej szerokości */
+            max-width: 100%; 
             margin: auto; 
         }
         
@@ -135,25 +134,28 @@
             box-shadow: 0 10px 30px rgba(0,0,0,.3);
         }
 
-        /* Kontener na 4 karty z funkcjami - WYMUSZENIE FLEXBOX */
+        /* Kontener na 4 karty z funkcjami - WYMUSZENIE POZIOMEGO UKŁADU */
         .features{ 
             display: flex; 
             justify-content: center; /* Centruje cały rząd kart */
             gap: 30px; 
+            /* Zamiast ograniczać szerokość całego kontenera, pozwalamy na overflow */
             width: 100%; 
-            max-width: 1200px; /* Maksymalna szerokość rzędu */
+            max-width: 100vw; /* Zapewnia, że zajmie całą szerokość widoku */
             
             /* KLUCZOWE ZMIANY: wymuszenie 4 kart obok siebie */
-            flex-wrap: nowrap; /* NIE ZAWYJAJ KART NA MNIEJSZE EKRANY */
-            overflow-x: auto; /* Dodaj przewijanie, jeśli jest za mało miejsca */
-            padding-bottom: 10px; /* Dodatkowe miejsce dla paska przewijania na małych ekranach */
+            flex-wrap: nowrap; /* NIE ZAWYJAJ KART - ZAWSZE W JEDNEJ LINII */
+            overflow-x: auto; /* DODAJ PASEK PRZEWIJANIA, JEŚLI KARTY SIĘ NIE MIESZCZĄ */
+            padding: 0 20px 15px 20px; /* Dodatkowy padding, by przewijanie było ładne */
+            
+            /* Zapewniamy, że .features jest wyśrodkowane w miarę możliwości */
+            margin: 0 auto;
         }
         
         /* Styl pojedynczej karty funkcji */
         .card{
-            /* Zapewniamy, że każda karta ma sztywną minimalną szerokość, aby się zmieściły */
-            min-width: 250px; 
-            flex-shrink: 0; /* Zapobiega zmniejszaniu się kart */
+            min-width: 250px; /* Sztywna szerokość dla każdej karty */
+            flex-shrink: 0; /* Zapobiega pomniejszaniu kart na wąskich ekranach */
             
             background: var(--card);
             border-radius: 24px;
@@ -170,15 +172,18 @@
             box-shadow: 0 10px 20px rgba(0,0,0,.3);
         }
         
-        /* Media Query - Przywrócenie łamania dla bardzo małych telefonów */
+        /* Media Query - Przywrócenie łamania dla bardzo małych telefonów (OPCJONALNIE) */
+        /* Możesz usunąć tę sekcję, jeśli chcesz ZAWSZE przewijanie poziome */
+        /*
         @media (max-width: 600px) {
             .features {
-                flex-wrap: wrap; /* Pozwól kartom łamać się na małych ekranach */
+                flex-wrap: wrap; 
             }
             .card {
-                min-width: 100%; /* Karta zajmuje całą szerokość na telefonie */
+                min-width: 100%; 
             }
         }
+        */
 
         /* Pozostałe style (bez zmian) */
         
