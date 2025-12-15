@@ -68,95 +68,115 @@
 </footer>
 
 <script>
-window.addEventListener('load',()=>{
+window.addEventListener('load', function() {
+    // Ukrywanie preloader'a
     const p=document.getElementById('preloader');
     if(p){ p.style.display='none'; }
-  });
 
-  function toggleTheme(){ document.body.classList.toggle('light'); }
+    // Działająca funkcja do kopiowania IP
+    const copyButton = document.getElementById('copyButton');
+    if (copyButton) {
+        copyButton.addEventListener('click', function(event) {
+            event.preventDefault(); 
+            
+            const ip = document.getElementById('ip').innerText;
+            
+            // Nowoczesna metoda (zalecana w URL)
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(ip)
+                    .then(() => {
+                        alert('✅ IP skopiowane: ' + ip + ' (Metoda nowa)');
+                    })
+                    .catch(err => {
+                        // Jeśli nowoczesna metoda zawiedzie, spróbuj starszej
+                        console.error('Nowoczesne kopiowanie zawiodło:', err);
+                        fallbackCopy(ip);
+                    });
+            } else {
+                // Starsza metoda (dla starszych przeglądarek lub niepewnych kontekstów)
+                fallbackCopy(ip);
+            }
 
-  // particles
-  const c=document.getElementById('particles'),x=c.getContext('2d');
-  function resize(){c.width=innerWidth;c.height=innerHeight} resize(); onresize=resize;
-  let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
-  function anim(){ x.clearRect(0,0,c.width,c.height); p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0}); requestAnimationFrame(anim)} anim();
-
-  // MC server status
-  let lastOnline=null;
-  function fetchStatus(){
-    fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
-      .then(r=>r.json())
-      .then(d=>{
-        const online=d.players?.online ?? 0;
-        const max=d.players?.max ?? 0;
-        document.getElementById('status').innerText=d.online?'🟢 ONLINE':'🔴 OFFLINE';
-        document.getElementById('players').innerText=online+' / '+max;
-        document.getElementById('percent').innerText=max?('📊 '+Math.round((online/max)*100)+'%'):'';
-        if(lastOnline===null){lastOnline=d.online;return}
-        if(!lastOnline&&d.online)sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony');
-        if(lastOnline&& !d.online)sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony');
-        lastOnline=d.online;
-      })
-      .catch(()=>{
-        document.getElementById('status').innerText='⚠️ API OFFLINE';
-        document.getElementById('players').innerText='-';
-        document.getElementById('percent').innerText='';
-      });
-  }
-  fetchStatus();
-  setInterval(fetchStatus,20000);
-
-  function sendDiscord(msg){
-    const webhook='PASTE_DISCORD_WEBHOOK_URL_HERE';
-    if(webhook.includes('PASTE'))return;
-    fetch(webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:msg})});
-  }
-
-  // language
-  let lang = navigator.language && navigator.language.startsWith('pl') ? 'pl' : 'en';
-  function toggleLang(){
-    lang = lang==='pl'?'en':'pl';
-    applyLang();
-  }
-  function applyLang(){
-    document.querySelectorAll('[data-pl]').forEach(e=>{
-      e.innerText = e.dataset[lang];
-    });
-  }
-  applyLang();
-  
-  // *** NOWA, BARDZIEJ ZGODNA METODA KOPIOWANIA IP ***
-  document.getElementById('copyButton').addEventListener('click', function(event) {
-    event.preventDefault(); 
-    
-    const ip = document.getElementById('ip').innerText;
-    
-    // Tworzy tymczasowy element do kopiowania
-    const tempInput = document.createElement('textarea');
-    tempInput.value = ip;
-    document.body.appendChild(tempInput);
-    
-    // Zaznacza tekst i próbuje go skopiować
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // Dla urządzeń mobilnych
-    
-    try {
-      const successful = document.execCommand('copy');
-      if (successful) {
-        alert('✅ IP skopiowane: ' + ip); 
-      } else {
-        alert('❌ Nie udało się skopiować IP (execCommand nie powiodło się). Spróbuj ręcznie: ' + ip);
-      }
-    } catch (err) {
-      alert('❌ Błąd kopiowania (execCommand nie jest wspierane). Spróbuj ręcznie: ' + ip);
-      console.error('Fallback copying error:', err);
+            function fallbackCopy(text) {
+                const tempInput = document.createElement('textarea');
+                tempInput.value = text;
+                tempInput.style.position = 'fixed'; // Aby nie wpływać na scrollowanie
+                tempInput.style.opacity = '0'; // Ukryj element
+                document.body.appendChild(tempInput);
+                
+                tempInput.select();
+                tempInput.setSelectionRange(0, 99999);
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        alert('✅ IP skopiowane: ' + text + ' (Metoda starsza)'); 
+                    } else {
+                        alert('❌ Nie udało się skopiować IP. Wciśnij Ctrl+C/Cmd+C: ' + text);
+                    }
+                } catch (err) {
+                    alert('❌ Błąd kopiowania. Spróbuj ręcznie: ' + text);
+                }
+                
+                document.body.removeChild(tempInput);
+            }
+        });
     }
-    
-    // Usuwa tymczasowy element
-    document.body.removeChild(tempInput);
-  });
-  // ************************************************
+}); // Koniec window.addEventListener('load')
 
+// Reszta Twoich funkcji (motywy, cząsteczki, status serwera, język)
+
+function toggleTheme(){ document.body.classList.toggle('light'); }
+
+// particles
+const c=document.getElementById('particles'),x=c.getContext('2d');
+function resize(){c.width=innerWidth;c.height=innerHeight} resize(); onresize=resize;
+let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
+function anim(){ x.clearRect(0,0,c.width,c.height); p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0}); requestAnimationFrame(anim)} anim();
+
+// MC server status
+let lastOnline=null;
+function fetchStatus(){
+  fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
+    .then(r=>r.json())
+    .then(d=>{
+      const online=d.players?.online ?? 0;
+      const max=d.players?.max ?? 0;
+      document.getElementById('status').innerText=d.online?'🟢 ONLINE':'🔴 OFFLINE';
+      document.getElementById('players').innerText=online+' / '+max;
+      document.getElementById('percent').innerText=max?('📊 '+Math.round((online/max)*100)+'%'):'';
+      if(lastOnline===null){lastOnline=d.online;return}
+      if(!lastOnline&&d.online)sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony');
+      if(lastOnline&& !d.online)sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony');
+      lastOnline=d.online;
+    })
+    .catch(()=>{
+      document.getElementById('status').innerText='⚠️ API OFFLINE';
+      document.getElementById('players').innerText='-';
+      document.getElementById('percent').innerText='';
+    });
+}
+fetchStatus();
+setInterval(fetchStatus,20000);
+
+function sendDiscord(msg){
+  const webhook='PASTE_DISCORD_WEBHOOK_URL_HERE';
+  if(webhook.includes('PASTE'))return;
+  fetch(webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:msg})});
+}
+
+// language
+let lang = navigator.language && navigator.language.startsWith('pl') ? 'pl' : 'en';
+function toggleLang(){
+  lang = lang==='pl'?'en':'pl';
+  applyLang();
+}
+function applyLang(){
+  document.querySelectorAll('[data-pl]').forEach(e=>{
+    e.innerText = e.dataset[lang];
+  });
+}
+applyLang();
 </script>
 </body>
 </html>
