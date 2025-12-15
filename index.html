@@ -392,16 +392,12 @@ function anim(){ x.clearRect(0,0,c.width,c.height); p.forEach(a=>{x.beginPath();
 let lastStatus = undefined; 
 
 function fetchStatus(){
-  console.log('Sprawdzanie statusu serwera (Logika v3: Najpierw API online, potem MOTD)...');
+  console.log('Sprawdzanie statusu serwera (Logika v4: Uproszczona obsługa API)...');
+  
   // Używamy API mcstatus.io
   fetch('https://api.mcstatus.io/v2/status/java/neoncraf_mc.aternos.me:34490')
-    .then(r => {
-      if (!r.ok) {
-        console.error('Błąd HTTP z mcstatus.io:', r.status, r.statusText);
-        throw new Error('Błąd HTTP: ' + r.status);
-      }
-      return r.json();
-    })
+    // Zamiast r.ok, upewniamy się, że zwrócono JSON, resztę kontroluje pole 'online'
+    .then(r => r.json()) 
     .then(d=>{
       // Zmienna logiczna, czy API uważa serwer za online
       const isApiOnline = d.online ?? false; 
@@ -413,7 +409,7 @@ function fetchStatus(){
       const onlinePlayers = d.players?.online ?? 0;
       const maxPlayers = d.players?.max ?? 0;
 
-      // --- LOGIKA KONTROLI STANU ---
+      // --- GŁÓWNA LOGIKA KONTROLI STANU ---
 
       if (isApiOnline) {
           // Stan 1: Serwer jest ZIELONY, ponieważ API zwraca "online: true"
@@ -461,11 +457,10 @@ function fetchStatus(){
       }
     })
     .catch(e=>{
-      console.error('Błąd połączenia z API (Błąd sieci/Czerwony stan - API Error):', e);
-      // Prawdziwy błąd (błąd sieci, HTTP 4xx/5xx, błąd parsowania JSON).
-      // Zmieniamy to na łagodniejszy, żółty błąd, aby nie sugerować awarii serwera gry.
+      console.error('Prawdziwy błąd połączenia z API (Błąd sieci/JSON):', e);
+      // Prawdziwy błąd (błąd sieci, błąd parsowania JSON). Oznaczamy go jako błąd danych.
       const currentStatus = 'data_error';
-      document.getElementById('status').innerText='🟡 OFFLINE (Brak Danych)'; // Zmiana koloru/tekstu
+      document.getElementById('status').innerText='🟡 OFFLINE (Brak Danych)'; 
       
       // Wysyłamy webhooka tylko jeśli ostatni znany stan to nie był błąd
       if (lastStatus !== currentStatus && lastStatus !== undefined) {
