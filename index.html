@@ -38,7 +38,6 @@
             background: radial-gradient(circle at top, var(--bg1), var(--bg2));
             color: var(--text);
             line-height: 1.6;
-            /* Usunięto overflow-x: hidden, aby widoczny był pasek przewijania poziomego */
             transition: background 0.5s ease, color 0.5s ease;
         }
         canvas{ position: fixed; inset: 0; z-index: -1; }
@@ -137,54 +136,63 @@
         /* Kontener na 4 karty z funkcjami - WYMUSZENIE POZIOMEGO UKŁADU */
         .features{ 
             display: flex; 
-            justify-content: center; /* Centruje cały rząd kart */
+            justify-content: center; 
             gap: 30px; 
-            /* Zamiast ograniczać szerokość całego kontenera, pozwalamy na overflow */
             width: 100%; 
-            max-width: 100vw; /* Zapewnia, że zajmie całą szerokość widoku */
+            max-width: 100vw; 
             
-            /* KLUCZOWE ZMIANY: wymuszenie 4 kart obok siebie */
-            flex-wrap: nowrap; /* NIE ZAWYJAJ KART - ZAWSZE W JEDNEJ LINII */
-            overflow-x: auto; /* DODAJ PASEK PRZEWIJANIA, JEŚLI KARTY SIĘ NIE MIESZCZĄ */
-            padding: 0 20px 15px 20px; /* Dodatkowy padding, by przewijanie było ładne */
-            
-            /* Zapewniamy, że .features jest wyśrodkowane w miarę możliwości */
+            flex-wrap: nowrap; 
+            overflow-x: auto; 
+            padding: 0 20px 15px 20px; 
             margin: 0 auto;
         }
         
-        /* Styl pojedynczej karty funkcji */
+        /* Styl pojedynczej karty funkcji - ZMIANY TUTAJ! */
         .card{
-            min-width: 250px; /* Sztywna szerokość dla każdej karty */
-            flex-shrink: 0; /* Zapobiega pomniejszaniu kart na wąskich ekranach */
+            /* Minimalna szerokość i WYMUSZONA minimalna WYSOKOŚĆ dla kwadratowego wyglądu */
+            min-width: 250px; 
+            min-height: 250px; /* Dodane, aby karta była bardziej kwadratowa */
+            
+            flex-shrink: 0; 
             
             background: var(--card);
             border-radius: 24px;
             padding: 30px;
             backdrop-filter: blur(14px);
             transition: .25s;
+            
+            /* Dodatkowy flexbox w karcie do centrowania pionowego tekstu */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centrowanie pionowe */
+            align-items: center; /* Centrowanie poziome */
+            text-align: center; /* Tekst wyśrodkowany */
         }
         .card h3 {
             font-size: 1.2rem;
             margin-bottom: 10px;
+        }
+        /* Zmniejszamy rozmiar czcionki w opisie dla bardziej kwadratowego wyglądu */
+        .card p {
+            font-size: 0.9rem; /* Zmniejszona czcionka */
         }
         .card:hover{ 
             transform: translateY(-10px) scale(1.03); 
             box-shadow: 0 10px 20px rgba(0,0,0,.3);
         }
         
-        /* Media Query - Przywrócenie łamania dla bardzo małych telefonów (OPCJONALNIE) */
-        /* Możesz usunąć tę sekcję, jeśli chcesz ZAWSZE przewijanie poziome */
-        /*
+        /* Media Query - Przywrócenie łamania dla bardzo małych telefonów */
         @media (max-width: 600px) {
             .features {
-                flex-wrap: wrap; 
+                flex-wrap: wrap; /* Pozwól kartom łamać się na małych ekranach */
             }
             .card {
-                min-width: 100%; 
+                min-width: 100%; /* Karta zajmuje całą szerokość na telefonie */
+                min-height: 200px; /* Zmniejszamy nieco minimalną wysokość na telefonach */
             }
         }
-        */
 
+        
         /* Pozostałe style (bez zmian) */
         
         /* Toggle (Przełączniki) */
