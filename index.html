@@ -418,7 +418,7 @@ function fetchStatus(){
 
       // 1. Priorytet 1: MOTD zawiera "offline" -> Wymuszenie OFFLINE 
       if (motdText.includes("offline")) {
-          statusDisplay = '🟡 OFFLINE ';
+          statusDisplay = ' OFFLINE ';
           currentStatus = 'motd_offline';
           document.getElementById('players').innerText = '0 / 0';
           document.getElementById('percent').innerText = '📊 0%';
@@ -426,7 +426,7 @@ function fetchStatus(){
       } 
       // 2. MOTD nie zawiera "offline" -> Wymuszenie ONLINE 
       else {
-          statusDisplay = '🔴 ONLINE';
+          statusDisplay = '🟢 ONLINE';
           currentStatus = 'online';
           
           // Aktualizacja graczy (tylko w stanie ONLINE)
