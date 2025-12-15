@@ -68,10 +68,13 @@
 </footer>
 
 <script>
-window.addEventListener('load', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const p = document.getElementById('preloader');
     if (p) {
-        p.style.display = 'none';
+        // Opóźnienie ukrycia preloadera o 3000 ms (3 sekundy)
+        setTimeout(() => {
+            p.style.display = 'none'; 
+        }, 3000); 
     }
 });
 </script>
