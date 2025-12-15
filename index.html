@@ -147,35 +147,32 @@
             margin: 0 auto;
         }
         
-        /* Styl pojedynczej karty funkcji - ZMIANY TUTAJ! */
+        /* Styl pojedynczej karty funkcji - Ustawienia 100x200px */
         .card{
-            /* Ustawienia dla małych i pionowych kart (100px szer. x 200px wys.) */
-            min-width: 100px; /* Zmniejszona szerokość */
-            min-height: 200px; /* Zmniejszona wysokość (proporcje 1:2) */
+            min-width: 100px; 
+            min-height: 200px; 
             
             flex-shrink: 0; 
             
             background: var(--card);
             border-radius: 24px;
-            /* Zmniejszony padding, aby treść się zmieściła */
             padding: 15px; 
             
             backdrop-filter: blur(14px);
             transition: .25s;
             
-            /* Dodatkowy flexbox w karcie do centrowania pionowego tekstu */
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Centrowanie pionowe */
-            align-items: center; /* Centrowanie poziome */
-            text-align: center; /* Tekst wyśrodkowany */
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
         }
         .card h3 {
-            font-size: 1rem; /* Zmniejszenie nagłówka */
+            font-size: 1rem; 
             margin-bottom: 8px;
         }
         .card p {
-            font-size: 0.8rem; /* Zmniejszenie opisu */
+            font-size: 0.8rem; 
         }
         .card:hover{ 
             transform: translateY(-10px) scale(1.03); 
@@ -185,11 +182,11 @@
         /* Media Query - Przywrócenie łamania dla bardzo małych telefonów */
         @media (max-width: 600px) {
             .features {
-                flex-wrap: wrap; /* Pozwól kartom łamać się na małych ekranach */
+                flex-wrap: wrap; 
             }
             .card {
-                min-width: 100%; /* Karta zajmuje całą szerokość na telefonie */
-                min-height: 200px; /* Utrzymujemy minimalną wysokość na telefonach */
+                min-width: 100%; 
+                min-height: 200px; 
             }
         }
 
@@ -291,7 +288,7 @@
         <a href="https://discord.gg/Ty9axmj8" target="_blank" class="btn secondary" data-pl="DISCORD" data-en="DISCORD">DISCORD</a>
     </div>
   
-  <p class="ip" data-pl="IP: " data-en="IP:neoncraft_mc.aternos.me:34490 ">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
+  <p class="ip" data-pl="IP: " data-en="IP: ">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
 </header>
 
 <section>
@@ -416,7 +413,7 @@ function fetchStatus(){
       const onlinePlayers = d.players?.online ?? 0;
       const maxPlayers = d.players?.max ?? 0;
 
-      // --- NOWA LOGIKA KONTROLI STANU ---
+      // --- LOGIKA KONTROLI STANU ---
 
       if (isApiOnline) {
           // Stan 1: Serwer jest ZIELONY, ponieważ API zwraca "online: true"
@@ -465,13 +462,14 @@ function fetchStatus(){
     })
     .catch(e=>{
       console.error('Błąd połączenia z API (Błąd sieci/Czerwony stan - API Error):', e);
-      // Prawdziwy błąd, który nie jest soft-off
-      const currentStatus = 'error_offline';
-      document.getElementById('status').innerText='🔴 OFFLINE (Błąd API)'; 
+      // Prawdziwy błąd (błąd sieci, HTTP 4xx/5xx, błąd parsowania JSON).
+      // Zmieniamy to na łagodniejszy, żółty błąd, aby nie sugerować awarii serwera gry.
+      const currentStatus = 'data_error';
+      document.getElementById('status').innerText='🟡 OFFLINE (Brak Danych)'; // Zmiana koloru/tekstu
       
-      // Wysyłamy webhooka tylko jeśli ostatni znany stan to nie był offline
+      // Wysyłamy webhooka tylko jeśli ostatni znany stan to nie był błąd
       if (lastStatus !== currentStatus && lastStatus !== undefined) {
-          sendDiscord('🚨 **NeoNCraf OFFLINE (Błąd API)**\nSerwer jest niedostępny lub wystąpił błąd połączenia z API.');
+          sendDiscord('🟡 **NeoNCraf OFFLINE (Błąd Danych)**\nSerwer jest prawdopodobnie offline lub wystąpił błąd w połączeniu z API (status API nieznany).');
       }
       lastStatus = currentStatus;
       document.getElementById('players').innerText='0 / 0';
