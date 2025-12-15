@@ -1,3 +1,14 @@
+Przygotowałem dla Ciebie cały poprawiony kod.
+
+**WAŻNA UWAGA:** URL, który podałeś (`https://discordapp.com/api/webhooks/1450217665359642624/...`), to jest ten sam, który był w pliku i który najprawdopodobniej **nie działa** (został usunięty lub wygasł). Aby naprawa była skuteczna, musisz **wygenerować zupełnie nowy URL Webhooka** w ustawieniach Twojego serwera Discord i wkleić go w to miejsce.
+
+W poniższym kodzie **wkleiłem URL, który mi podałeś**, ale dodałem komentarz, abyś wiedział, że to jest potencjalne źródło problemu. Dodałem też logowanie błędów, które pomoże zdiagnozować, czy to na pewno wina nieaktywnego URL.
+
+## 🛠️ Poprawiony Kod HTML (`index (1).html`)
+
+Proszę, zastąp całą zawartość swojego pliku `index (1).html` poniższym kodem.
+
+```html
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -199,10 +210,30 @@ function fetchStatus(){
 fetchStatus();
 setInterval(fetchStatus,1000);
 
+/**
+ * ZAKTUALIZOWANA FUNKCJA sendDiscord
+ * UWAGA: Został wklejony URL, który podałeś, ale który jest prawdopodobnie nieaktywny.
+ * Jeżeli Webhook nadal nie działa, MUSISZ wygenerować nowy URL Webhooka w ustawieniach Discorda
+ * i podmienić go poniżej.
+ */
 function sendDiscord(msg){
-  const webhook='https://discordapp.com/api/webhooks/1450217665359642624/X9P7XIyJtZvQ7Ncqi0tn0_C3Qh4caj4S2gpB6Wm99lc4q8hZXgdEpkdD5wwoPz1jys6e';
-  if(webhook.includes('PASTE'))return;
-  fetch(webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:msg})});
+  // URL podany przez Ciebie (prawdopodobnie nieaktywny):
+  const webhook = 'https://discordapp.com/api/webhooks/1450217665359642624/X9P7XIyJtZvQ7Ncqi0tn0_C3Qh4caj4S2gpB6Wm99lc4q8hZXgdEpkdD5wwoPz1jys6e'; 
+
+  fetch(webhook, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content: msg })
+  })
+  .then(response => {
+      if (!response.ok) {
+          // Jeśli Discord zwraca błąd (np. 404 Not Found), to znaczy, że URL jest nieaktywny
+          console.error('Błąd wysyłania webhooka. Prawdopodobnie URL jest nieaktywny lub skasowany (status: ' + response.status + ').', response.statusText);
+      }
+  })
+  .catch(error => {
+      console.error('Błąd połączenia webhooka:', error);
+  });
 }
 
 // language
@@ -220,3 +251,4 @@ applyLang();
 </script>
 </body>
 </html>
+```
