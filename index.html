@@ -149,15 +149,17 @@
         
         /* Styl pojedynczej karty funkcji - ZMIANY TUTAJ! */
         .card{
-            /* Minimalna szerokość i WYMUSZONA minimalna WYSOKOŚĆ dla kwadratowego wyglądu */
+            /* Minimalna szerokość i WYMUSZONA minimalna WYSOKOŚĆ dla proporcji 4:5 */
             min-width: 250px; 
-            min-height: 250px; /* Dodane, aby karta była bardziej kwadratowa */
+            min-height: 315px; /* Zwiększona wysokość, aby zbliżyć się do proporcji 4:5 */
             
             flex-shrink: 0; 
             
             background: var(--card);
             border-radius: 24px;
-            padding: 30px;
+            /* Zmniejszony padding, aby zmieścić więcej treści */
+            padding: 25px; 
+            
             backdrop-filter: blur(14px);
             transition: .25s;
             
