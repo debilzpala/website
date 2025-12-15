@@ -149,16 +149,16 @@
         
         /* Styl pojedynczej karty funkcji - ZMIANY TUTAJ! */
         .card{
-            /* Minimalna szerokość i WYMUSZONA minimalna WYSOKOŚĆ dla proporcji 1:2 (czyli 5:10) */
-            min-width: 100px; 
-            min-height: 200px; /* ZWIĘKSZONA WYSOKOŚĆ: Szerokość 250px x 2 = 500px */
+            /* Zmniejszone wymiary dla małych i pionowych kart (100px szer. x 200px wys.) */
+            min-width: 100px; /* Zmniejszona szerokość */
+            min-height: 200px; /* Zmniejszona wysokość (proporcje 1:2) */
             
             flex-shrink: 0; 
             
             background: var(--card);
             border-radius: 24px;
-            /* Utrzymujemy padding, aby treść nie była zbyt ściśnięta */
-            padding: 25px; 
+            /* Zmniejszony padding, aby treść się zmieściła */
+            padding: 15px; 
             
             backdrop-filter: blur(14px);
             transition: .25s;
@@ -171,12 +171,11 @@
             text-align: center; /* Tekst wyśrodkowany */
         }
         .card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
+            font-size: 1rem; /* Zmniejszenie nagłówka */
+            margin-bottom: 8px;
         }
-        /* Zmniejszamy rozmiar czcionki w opisie dla bardziej kwadratowego wyglądu */
         .card p {
-            font-size: 0.9rem; /* Zmniejszona czcionka */
+            font-size: 0.8rem; /* Zmniejszenie opisu */
         }
         .card:hover{ 
             transform: translateY(-10px) scale(1.03); 
@@ -190,7 +189,7 @@
             }
             .card {
                 min-width: 100%; /* Karta zajmuje całą szerokość na telefonie */
-                min-height: 200px; /* Zmniejszamy nieco minimalną wysokość na telefonach */
+                min-height: 200px; /* Utrzymujemy minimalną wysokość na telefonach */
             }
         }
 
