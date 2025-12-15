@@ -1,178 +1,255 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NeoNCraf – Serwer Minecraft</title>
-  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
-  <style>
-    /* --- UJEDNOLICONA SEKCJA STYLÓW --- */
-    
-    /* Wymuszenie czcionki 'Minecraft' dla wszystkich elementów */
-    *{
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: 'Minecraft', 'Inter', sans-serif !important; 
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeoNCraf – Serwer Minecraft</title>
+    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+    <style>
+        /* --- UJEDNOLICONA SEKCJA STYLÓW Z WZORCA --- */
+        
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            /* Używamy !important, aby wymusić czcionkę, co jest częstą przyczyną problemu */
+            font-family: 'Minecraft', 'Inter', sans-serif !important; 
+        }
 
-    /* Zmienne kolorów (Motyw Ciemny/Jasny) */
-    :root{
-        --bg1:#1b1f3b; 
-        --bg2:#0a0d1a; 
-        --text:#fff;
-        --card:rgba(255,255,255,.05);
-    }
-    body.light{
-        --bg1:#f4f6ff; 
-        --bg2:#dfe3ff; 
-        --text:#000;
-        --card:rgba(0,0,0,.05);
-    }
+        /* Zmienne kolorów (Motyw Ciemny/Jasny) */
+        :root{
+            --bg1:#1b1f3b; 
+            --bg2:#0a0d1a; 
+            --text:#fff;
+            --card:rgba(255,255,255,.05); /* Prawie nieprzezroczysty biały dla ciemnego tła */
+            --primary-color: #6cf; /* Niebieski */
+            --secondary-color: #9f6cff; /* Fioletowy */
+        }
+        body.light{
+            --bg1:#f4f6ff; 
+            --bg2:#dfe3ff; 
+            --text:#000;
+            --card:rgba(0,0,0,.05); /* Prawie nieprzezroczysty czarny dla jasnego tła */
+        }
 
-    /* Ogólne style body */
-    body{
-        background: radial-gradient(circle at top, var(--bg1), var(--bg2));
-        color: var(--text);
-        line-height: 1.6;
-        overflow-x: hidden;
-        transition: background 0.5s ease, color 0.5s ease;
-    }
-    canvas{ position: fixed; inset: 0; z-index: -1; }
-    
-    /* Sekcja Header */
-    header{
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 40px 20px;
-    }
-    h1{
-        font-size: clamp(3rem, 6vw, 5rem);
-        font-weight: 900;
-        background: linear-gradient(90deg, #6cf, #9f6cff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float{
-        0%, 100%{ transform: translateY(0); }
-        50%{ transform: translateY(-10px); }
-    }
-    .ip {
-        font-size: 1.2rem;
-        margin-top: 20px;
-        color: #9f6cff;
-    }
-    
-    /* Przyciski */
-    .btns{ display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-    .btn{
-        padding: 14px 28px;
-        border-radius: 14px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: .25s;
-        cursor: pointer;
-    }
-    .btn:hover{
-        transform: scale(1.08) rotate(-1deg);
-        box-shadow: 0 15px 40px rgba(0,0,0,.4);
-    }
-    .primary{ background: linear-gradient(90deg, #6cf, #9f6cff); color: #000; }
-    .secondary{ border: 2px solid #6cf; color: #6cf; }
-    
-    /* Sekcja Features */
-    section{ padding: 80px 20px; max-width: 1200px; margin: auto; }
-    .features{ display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-    .card{
-        background: var(--card);
-        border-radius: 24px;
-        padding: 30px;
-        backdrop-filter: blur(14px);
-        transition: .25s;
-    }
-    .card:hover{ transform: translateY(-10px) scale(1.03); }
-    
-    /* Toggle (Przełączniki) */
-    .toggle{
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #6cf, #9f6cff);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 1.4rem;
-        z-index: 10;
-    }
-    #langToggle{ top: 80px; }
-    
-    /* Creeper */
-    .creeper{
-        width: 80px;
-        height: 80px;
-        margin: 40px auto 0;
-        background: linear-gradient(#4caf50, #2e7d32);
-        border-radius: 12px;
-        position: relative;
-        animation: walk 3s ease-in-out infinite;
-    }
-    .creeper:before, .creeper:after{
-        content: '';
-        position: absolute;
-        background: #000;
-    }
-    .creeper:before{
-        width: 14px;
-        height: 14px;
-        left: 18px;
-        top: 20px;
-        box-shadow: 30px 0 0 #000;
-    }
-    .creeper:after{
-        width: 18px;
-        height: 28px;
-        left: 31px;
-        top: 40px;
-    }
-    @keyframes walk{
-        0%, 100%{ transform: translateY(0); }
-        50%{ transform: translateY(-10px); }
-    }
+        /* Ogólne style body */
+        body{
+            /* Główne tło */
+            background: radial-gradient(circle at top, var(--bg1), var(--bg2));
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+        /* Cząsteczki w tle */
+        canvas{ position: fixed; inset: 0; z-index: -1; }
+        
+        /* Sekcja Header - Główny kontener na środku ekranu */
+        header{
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        /* Styl dla głównego nagłówka "NeoNCraf" */
+        h1{
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 900;
+            margin: 10px 0 25px;
+            /* Gradient tekstu */
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float{
+            0%, 100%{ transform: translateY(0); }
+            50%{ transform: translateY(-10px); }
+        }
 
-    /* Preloader */
-    #preloader{
-        position: fixed;
-        inset: 0;
-        background: #050816;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 999;
-        font-size: 1.2rem;
-        opacity: 1; 
-        transition: opacity 0.5s ease; 
-    }
-    #preloader.hidden { 
-        opacity: 0 !important;
-    }
-    
-    /* Footer */
-    footer {
-        text-align: center;
-        padding: 40px 20px;
-        font-size: 0.9em;
-        color: rgba(255, 255, 255, 0.6);
-    }
-  </style>
+        /* Nagłówek opisujący serwer */
+        header p:first-of-type {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
+        /* Przyciski - kontener Flexbox */
+        .btns{ 
+            display: flex; 
+            gap: 20px; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            margin-bottom: 25px;
+        }
+        
+        /* Ogólny styl przycisku */
+        .btn{
+            padding: 14px 28px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: .25s;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        }
+        .btn:hover{
+            transform: scale(1.08) rotate(-1deg);
+            box-shadow: 0 15px 40px rgba(0,0,0,.4);
+        }
+        /* Styl dla głównego przycisku (Kopiuj IP) */
+        .primary{ 
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); 
+            color: #000; /* Czarny tekst na jasnym gradiencie */
+        }
+        /* Styl dla drugiego przycisku (Discord) */
+        .secondary{ 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            background: none; /* Przezroczyste tło */
+        }
+        
+        /* Styl wyświetlania IP */
+        .ip {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+        
+        /* Sekcje z funkcjami */
+        section{ 
+            padding: 40px 20px 80px; 
+            max-width: 1200px; 
+            margin: auto; 
+        }
+        
+        /* Główne okno statusu (Centralna Karta) */
+        #status-container {
+            width: clamp(300px, 80%, 400px);
+            margin: 0 auto 60px; /* Centrowanie + odstęp */
+            text-align: center;
+            padding: 30px;
+            background: var(--card); 
+            border-radius: 24px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 10px 30px rgba(0,0,0,.3);
+        }
+
+        #status-container h3 {
+             margin-bottom: 15px;
+        }
+
+        #status-container #status {
+             font-size: 1.1rem;
+             font-weight: bold;
+             margin-bottom: 20px;
+        }
+        
+        /* Kontener na 4 karty z funkcjami */
+        .features{ 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 30px; 
+        }
+        
+        /* Styl pojedynczej karty funkcji */
+        .card{
+            background: var(--card);
+            border-radius: 24px;
+            padding: 30px;
+            backdrop-filter: blur(14px);
+            transition: .25s;
+        }
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .card:hover{ 
+            transform: translateY(-10px) scale(1.03); 
+            box-shadow: 0 10px 20px rgba(0,0,0,.3);
+        }
+        
+        /* Toggle (Przełączniki) - Motyw i Język */
+        .toggle{
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+        #langToggle{ top: 70px; }
+        
+        /* Creeper */
+        .creeper{
+            width: 80px;
+            height: 80px;
+            margin: 40px auto 0;
+            background: linear-gradient(#4caf50, #2e7d32);
+            border-radius: 12px;
+            position: relative;
+            animation: walk 3s ease-in-out infinite;
+        }
+        .creeper:before, .creeper:after{
+            content: '';
+            position: absolute;
+            background: #000;
+        }
+        .creeper:before{
+            width: 14px;
+            height: 14px;
+            left: 18px;
+            top: 20px;
+            box-shadow: 30px 0 0 #000;
+        }
+        .creeper:after{
+            width: 18px;
+            height: 28px;
+            left: 31px;
+            top: 40px;
+        }
+        @keyframes walk{
+            0%, 100%{ transform: translateY(0); }
+            50%{ transform: translateY(-10px); }
+        }
+
+        /* Preloader */
+        #preloader{
+            position: fixed;
+            inset: 0;
+            background: #050816;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            font-size: 1.2rem;
+            opacity: 1; 
+            transition: opacity 0.5s ease; 
+        }
+        #preloader.hidden { 
+            opacity: 0 !important;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
 </head>
 <body>
 <div id="preloader"><div class="loader">Ładowanie Strony NeoNCraf...</div></div>
@@ -182,46 +259,44 @@
 <div id="langToggle" class="toggle" onclick="toggleLang()">🌍</div> 
 
 <header>
-  <div style="text-align:center;line-height:1.2">
-        <p data-pl="Nowoczesny serwer Minecraft nowej generacji." data-en="A modern next-generation Minecraft server.">
-      Nowoczesny serwer Minecraft nowej generacji.
-    </p>
-  </div>
-  <h1 data-pl="NeoNCraf" data-en="NeoNCraf">NeoNCraf</h1>
+  <p data-pl="NOWOCZESNY SERWER MINECRAFT NOWEJ GENERACJI." data-en="A MODERN NEXT-GENERATION MINECRAFT SERVER.">
+    NOWOCZESNY SERWER MINECRAFT NOWEJ GENERACJI.
+  </p>
+  <h1 data-pl="NEONCRAF" data-en="NEONCRAF">NEONCRAF</h1>
   
-  <div class="btns">
-    <a href="#" id="copyButton" class="btn primary">Skopiuj IP serwera</a>
-    <a href="https://discord.gg/Ty9axmj8" target="_blank" class="btn secondary">Discord</a>
-  </div>
+    <div class="btns">
+        <a href="#" id="copyButton" class="btn primary" data-pl="SKOPIUJ IP SERWERA" data-en="COPY SERVER IP">SKOPIUJ IP SERWERA</a>
+        <a href="https://discord.gg/Ty9axmj8" target="_blank" class="btn secondary" data-pl="DISCORD" data-en="DISCORD">DISCORD</a>
+    </div>
   
-  <p class="ip">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
+  <p class="ip" data-pl="IP: " data-en="IP: ">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
 </header>
 
 <section>
-  <div class="card" style="text-align:center; margin-bottom:40px">
-    <h3 data-pl="📊 Status serwera" data-en="📊 Server status">📊 Status serwera</h3>
+  <div id="status-container">
+    <h3 data-pl="📊 STATUS SERWERA" data-en="📊 SERVER STATUS">📊 STATUS SERWERA</h3>
     <p id="status">Sprawdzanie...</p>
-    <p data-pl="👥 Gracze online:" data-en="👥 Players online:">👥 Gracze online:</p>
-    <p><span id="players">-</span></p>
-    <p><span id="percent">-</span></p>
+    <p data-pl="👥 GRACZE ONLINE:" data-en="👥 PLAYERS ONLINE:">👥 GRACZE ONLINE:</p>
+    <p><span id="players">0 / 0</span></p>
+    <p><span id="percent">📊 0%</span></p>
     <div class="creeper"></div>
   </div>
   
   <div class="features">
     <div class="card">
-      <h3 data-pl="⚡ Wydajność" data-en="⚡ Performance">⚡ Wydajność</h3>
+      <h3 data-pl="⚡ WYDAJNOŚĆ" data-en="⚡ PERFORMANCE">⚡ WYDAJNOŚĆ</h3>
       <p data-pl="Stabilny serwer, niski ping i brak lagów – gramy płynnie 24/7." data-en="Stable server, low ping, and no lag – smooth gaming 24/7.">Stabilny serwer, niski ping i brak lagów – gramy płynnie 24/7.</p>
     </div>
     <div class="card">
-      <h3 data-pl="🧩 Unikalne tryby" data-en="🧩 Unique modes">🧩 Unikalne tryby</h3>
+      <h3 data-pl="🧩 UNIKALNE TRYBY" data-en="🧩 UNIQUE MODES">🧩 UNIKALNE TRYBY</h3>
       <p data-pl="Autorskie systemy, eventy i mechaniki, których nie znajdziesz nigdzie indziej." data-en="Custom systems, events, and mechanics you won't find anywhere else.">Autorskie systemy, eventy i mechaniki, których nie znajdziesz nigdzie indziej.</p>
     </div>
     <div class="card">
-      <h3 data-pl="👥 Społeczność" data-en="👥 Community">👥 Społeczność</h3>
+      <h3 data-pl="👥 SPOŁECZNOŚĆ" data-en="👥 COMMUNITY">👥 SPOŁECZNOŚĆ</h3>
       <p data-pl="Aktywni gracze, pomocna administracja i świetna atmosfera." data-en="Active players, helpful staff, and a great atmosphere.">Aktywni gracze, pomocna administracja i świetna atmosfera.</p>
     </div>
     <div class="card">
-      <h3 data-pl="🔒 Bezpieczeństwo" data-en="🔒 Security">🔒 Bezpieczeństwo</h3>
+      <h3 data-pl="🔒 BEZPIECZEŃSTWO" data-en="🔒 SECURITY">🔒 BEZPIECZEŃSTWO</h3>
       <p data-pl="Anty-cheat, backupy i ochrona danych graczy." data-en="Anti-cheat, backups, and player data protection.">Anty-cheat, backupy i ochrona danych graczy.</p>
     </div>
   </div>
@@ -238,7 +313,8 @@
 window.addEventListener('load', function() {
     const p = document.getElementById('preloader');
     if (p) {
-        setTimeout(() => {
+        // Czas musi być dłuższy, aby zobaczyć efekt. 
+        setTimeout(() => {
             p.classList.add('hidden'); 
             setTimeout(() => {
                 p.style.display = 'none';
@@ -294,7 +370,7 @@ function resize(){c.width=innerWidth;c.height=innerHeight} resize(); onresize=re
 let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
 function anim(){ x.clearRect(0,0,c.width,c.height); p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0}); requestAnimationFrame(anim)} anim();
 
-// --- LOGIKA STATUSU SERWERA (OSTATECZNA LOGIKA MOTD/ATERNOS) ---
+// --- LOGIKA STATUSU SERWERA ---
 let lastStatus = undefined; 
 
 function fetchStatus(){
@@ -323,7 +399,7 @@ function fetchStatus(){
       if (motdText.includes("offline")) {
           statusDisplay = '🟡 OFFLINE (Wymuszone komunikat.)';
           currentStatus = 'motd_offline';
-          // Zerowanie graczy, aby uniknąć fałszywych danych przy wymuszonym statusie
+          // Zerowanie graczy
           document.getElementById('players').innerText = '0 / 0';
           document.getElementById('percent').innerText = '📊 0%';
 
@@ -359,7 +435,7 @@ function fetchStatus(){
     })
     .catch(e=>{
       console.error('Błąd połączenia z API (Prawdziwy OFF):', e);
-      // Jeśli błąd, to znaczy, że serwer jest niedostępny lub API nie działa (prawdziwy OFFLINE)
+      // Prawdziwy OFFLINE
       const currentStatus = 'error_offline';
       document.getElementById('status').innerText='🔴 OFFLINE (Błąd API)'; 
       
@@ -368,8 +444,8 @@ function fetchStatus(){
           sendDiscord('🔴 **NeoNCraf OFFLINE (Błąd)**\nSerwer jest niedostępny lub wystąpił błąd API.');
       }
       lastStatus = currentStatus;
-      document.getElementById('players').innerText='-';
-      document.getElementById('percent').innerText='';
+      document.getElementById('players').innerText='0 / 0';
+      document.getElementById('percent').innerText='📊 0%';
     });
 }
 fetchStatus();
@@ -411,7 +487,11 @@ function toggleLang(){
 }
 function applyLang(){
   document.querySelectorAll('[data-pl]').forEach(e=>{
-    e.innerText = e.dataset[lang];
+    const newText = e.dataset[lang];
+    if (e.tagName === 'A' || e.tagName === 'H1' || e.tagName === 'H3' || e.tagName === 'P') {
+        // Dla tych tagów, nadpisujemy całą zawartość
+        e.innerText = newText;
+    }
   });
 }
 applyLang();
