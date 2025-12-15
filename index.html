@@ -201,7 +201,7 @@ function fetchStatus(){
       } else if (d.host) { 
           // 2. API odpowiedziało, ale online: false ORAZ mamy dane hosta. 
           // To oznacza, że serwer Aternos jest włączony, ale w trybie oczekiwania.
-          statusDisplay = '🟡 CZEKANIE (LOBBY)';
+          statusDisplay = '🟢 ONLINE';
           currentStatus = 'lobby';
       } else {
           // 3. Brak pełnej odpowiedzi, ale nie błąd sieci (API nie może znaleźć serwera)
