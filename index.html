@@ -125,22 +125,37 @@ window.addEventListener('load',()=>{
   }
   applyLang();
   
-  // POPRAWKA 2: Działająca funkcja do kopiowania IP
+  // *** NOWA, BARDZIEJ ZGODNA METODA KOPIOWANIA IP ***
   document.getElementById('copyButton').addEventListener('click', function(event) {
-    event.preventDefault(); // Zapobiega przeładowaniu strony
-    const ipElement = document.getElementById('ip');
-    const ip = ipElement.innerText;
-
-    // Użycie Clipboard API do kopiowania tekstu
-    navigator.clipboard.writeText(ip).then(() => {
-      // Potwierdzenie skopiowania
-      alert('✅ IP skopiowane: ' + ip); 
-    }).catch(err => {
-      // Obsługa błędu
-      console.error('Błąd kopiowania:', err);
-      alert('❌ Nie udało się skopiować IP. Spróbuj ręcznie: ' + ip);
-    });
+    event.preventDefault(); 
+    
+    const ip = document.getElementById('ip').innerText;
+    
+    // Tworzy tymczasowy element do kopiowania
+    const tempInput = document.createElement('textarea');
+    tempInput.value = ip;
+    document.body.appendChild(tempInput);
+    
+    // Zaznacza tekst i próbuje go skopiować
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // Dla urządzeń mobilnych
+    
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        alert('✅ IP skopiowane: ' + ip); 
+      } else {
+        alert('❌ Nie udało się skopiować IP (execCommand nie powiodło się). Spróbuj ręcznie: ' + ip);
+      }
+    } catch (err) {
+      alert('❌ Błąd kopiowania (execCommand nie jest wspierane). Spróbuj ręcznie: ' + ip);
+      console.error('Fallback copying error:', err);
+    }
+    
+    // Usuwa tymczasowy element
+    document.body.removeChild(tempInput);
   });
+  // ************************************************
 
 </script>
 </body>
