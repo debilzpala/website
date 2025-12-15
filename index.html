@@ -183,21 +183,26 @@ function fetchStatus(){
       return r.json();
     })
     .then(d=>{
-      const isOnlineFromAPI = d.online === true;
-      const onlinePlayers = d.players?.online ?? 0;
-      
-      let statusDisplay;
-      let currentStatus; // true = gotowy do gry, false = nie gotowy/lobby/offline
+      // NOWA, PROSTSZA LOGIKA: Sprawdź tylko, czy API zwróciło, że jest online i czy są gracze
+      const isOnlineFromAPI = d.online === true;
+      const onlinePlayers = d.players?.online ?? 0;
+      
+      let statusDisplay;
+      let currentStatus; // true = gotowy do gry, false = nie gotowy/lobby/offline
 
-      if (isOnlineFromAPI) {
-          // API zwróciło, że serwer działa
-          statusDisplay = '🟢 ONLINE';
-          currentStatus = true;
-      } else { 
-          // API zwróciło d.online: false (LOBBY/CZEKANIE Aternos)
-          statusDisplay = '🟡 CZEKANIE (LOBBY)';
-          currentStatus = false;
-      }
+      if (isOnlineFromAPI && onlinePlayers > 0) {
+          // Serwer działa i są gracze (Prawdziwy ONLINE)
+          statusDisplay = '🟢 ONLINE';
+          currentStatus = true;
+      } else if (isOnlineFromAPI && onlinePlayers === 0) {
+          // Serwer działa, ale jest pusty (LOBBY/CZEKANIE)
+          statusDisplay = '🟡 CZEKANIE (LOBBY)';
+          currentStatus = false;
+      } else {
+          // API zwróciło d.online: false (Niedostępny)
+          statusDisplay = '🔴 OFFLINE';
+          currentStatus = false;
+      }
 
       // Aktualizacja licznika graczy i % (używamy danych z API)
       const max=d.players?.max ?? 0;
@@ -208,7 +213,6 @@ function fetchStatus(){
       console.log('Aktualny Status (Gra): ' + currentStatus + '. Poprzedni Status: ' + lastOnline);
       
       // Logika Webhooka: Wysyłanie tylko przy ZMIANIE STANU
-      // Webhook teraz monitoruje, czy serwer jest gotowy do gry (true) czy w lobby/offline (false)
       if(lastOnline === undefined) {
         lastOnline = currentStatus;
         return; 
@@ -218,7 +222,7 @@ function fetchStatus(){
         if (currentStatus) {
             sendDiscord('🟢 **NeoNCraf ONLINE**\nSerwer został uruchomiony i jest gotowy do gry!');
         } else {
-            sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer wszedł w tryb oczekiwania (LOBBY) lub został wyłączony.');
+            sendDiscord('🔴 **NeoNCraf OFFLINE**\nSerwer został wyłączony lub wszedł w tryb oczekiwania (LOBBY).');
         }
         lastOnline = currentStatus; // Aktualizujemy stan po wysłaniu powiadomienia
       }
