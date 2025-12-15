@@ -135,7 +135,7 @@ window.addEventListener('load', function() {
                 try {
                     const successful = document.execCommand('copy');
                     if (successful) {
-                        alert('✅ IP Servera skopiowane (metoda fallback) IP to: ' + text); 
+                        alert('✅ IP Servera skopiowane, IP to: ' + text); 
                     } else {
                         alert('❌ Nie udało się skopiować IP. Wciśnij Ctrl+C/Cmd+C: ' + text);
                     }
@@ -184,7 +184,7 @@ function fetchStatus(){
 
       // 1. Priorytet 1: MOTD zawiera "offline" -> Wymuszenie OFFLINE (online: false)
       if (motdText.includes("offline")) {
-          statusDisplay = '🟡 OFFLINE (Wymuszone komunikat.)';
+          statusDisplay = '🟢 ONLINE (Wymuszone komunikat.)';
           currentStatus = 'motd_offline';
           // Zerowanie graczy, aby uniknąć fałszywych danych przy wymuszonym statusie
           document.getElementById('players').innerText = '0 / 0';
