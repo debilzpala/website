@@ -11,7 +11,7 @@
 <div id="preloader"><div class="loader">Ładowanie NeoNCraf...</div></div>
 <canvas id="particles"></canvas>
 <div id="themeToggle" class="toggle" onclick="toggleTheme()">🌙</div>
-<div id="langToggle" class="toggle" style="top:80px" onclick="toggleLang()">🌍</div>🌙</div>
+<div id="langToggle" class="toggle" style="top:80px" onclick="toggleLang()">🌍</div>
 <canvas id="particles"></canvas>
 <div class="toggle" onclick="toggleTheme()">🌙</div>
 
@@ -25,12 +25,14 @@
     <h1 data-pl="NeoNCraf" data-en="NeoNCraf">NeoNCraf</h1>
   </div>
   
+  </p>
 <div class="btns">
   <a href="#" id="copyButton" class="btn primary">Skopiuj IP serwera</a>
   <a href="https://discord.gg/Ty9axmj8" target="_blank" class="btn secondary">Discord</a>
 </div>
-
-<p class="ip">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
+  
+  <p class="ip">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
+</header>
 
 <section>
   <div class="card" style="text-align:center; margin-bottom:40px">
@@ -68,11 +70,6 @@
 
 
 <script>
-  function copyIP() {
-    const ip = document.getElementById('ip').innerText;
-    navigator.clipboard.writeText(ip);
-    alert('IP skopiowane: ' + ip);
-  }
 window.addEventListener('load',()=>{
     const p=document.getElementById('preloader');
     if(p){ p.style.display='none'; }
@@ -111,12 +108,6 @@ Serwer został wyłączony');
         document.getElementById('percent').innerText='';
       });
   }
-        lastOnline = d.online;
-      })
-      .catch(()=>{ document.getElementById('status').innerText='❌ API error'; });
-  })
-      .catch(()=>{ document.getElementById('status').innerText='❌ API error'; });
-  }
   fetchStatus();
   setInterval(fetchStatus,20000);
 
@@ -124,33 +115,37 @@ Serwer został wyłączony');
     const webhook='PASTE_DISCORD_WEBHOOK_URL_HERE';
     if(webhook.includes('PASTE'))return;
     fetch(webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:msg})});
-  },
-      body:JSON.stringify({
-        content:'🚨 **NeoNCraf OFFLINE!**
-Serwer jest aktualnie wyłączony.'
-      })
-    });
   }
 
-(fetchStatus,20000);
-
-  
-
-  // toast
-  const t=document.getElementById('toast'); setTimeout(()=>t.classList.add('show'),800);
-
   // language
-  // language auto-detect
   let lang = navigator.language && navigator.language.startsWith('pl') ? 'pl' : 'en';
   function toggleLang(){
     lang = lang==='pl'?'en':'pl';
     applyLang();
-  
   }
   function applyLang(){
     document.querySelectorAll('[data-pl]').forEach(e=>{
       e.innerText = e.dataset[lang];
     });
   }
-  applyLang(););
-  }
+  applyLang();
+
+  // POPRAWKA 2: Nowa funkcja do kopiowania IP (podpięta do id="copyButton")
+  document.getElementById('copyButton').addEventListener('click', function(event) {
+    event.preventDefault(); // Zapobiega przeładowaniu strony
+    const ipElement = document.getElementById('ip');
+    const ip = ipElement.innerText;
+
+    // Użycie Clipboard API do kopiowania tekstu
+    navigator.clipboard.writeText(ip).then(() => {
+      // Potwierdzenie skopiowania
+      alert('✅ IP skopiowane: ' + ip); 
+    }).catch(err => {
+      // Obsługa błędów, jeśli przeglądarka blokuje dostęp
+      console.error('Błąd kopiowania:', err);
+      alert('❌ Nie udało się skopiować IP. Spróbuj ręcznie: ' + ip);
+    });
+  });
+</script>
+</body>
+</html>
