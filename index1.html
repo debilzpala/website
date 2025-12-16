@@ -6,7 +6,6 @@
 <title>NeoNCraf – Sklep Rang</title>
 <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
 <style>
-/* ===== RESET ===== */
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Minecraft','Inter',sans-serif;}
 body{overflow-x:hidden;cursor:url('https://i.imgur.com/ZX1aXbX.png'),auto;}
 :root{
@@ -15,8 +14,6 @@ body{overflow-x:hidden;cursor:url('https://i.imgur.com/ZX1aXbX.png'),auto;}
 }
 body.light{--bg1:#f4f6ff;--bg2:#dfe3ff;--text:#000;--card:rgba(0,0,0,.05);}
 body{background:radial-gradient(circle at top,var(--bg1),var(--bg2));color:var(--text);line-height:1.6;transition:.5s;}
-
-/* ===== HEADER ===== */
 header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px;}
 h1{font-size:clamp(3rem,7vw,6rem);font-weight:900;margin:10px 0 25px;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:float 3s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
@@ -26,8 +23,6 @@ header p:first-of-type{font-size:1.1rem;text-transform:uppercase;letter-spacing:
 .btn:hover{transform:scale(1.08) rotate(-1deg);box-shadow:0 15px 40px rgba(0,0,0,.4);}
 .primary{background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));color:#000;}
 .secondary{border:2px solid var(--primary-color);color:var(--primary-color);background:none;}
-
-/* ===== SECTIONS ===== */
 section{display:flex;flex-direction:column;align-items:center;padding:40px 20px 80px;max-width:100%;margin:auto;}
 .features{display:flex;justify-content:center;gap:30px;width:100%;max-width:100vw;flex-wrap:nowrap;overflow-x:auto;padding:0 20px 15px 20px;margin:0 auto;}
 .card{min-width:150px;min-height:200px;flex-shrink:0;background:var(--card);border-radius:24px;padding:15px;backdrop-filter:blur(14px);transition:.25s;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
@@ -35,14 +30,10 @@ section{display:flex;flex-direction:column;align-items:center;padding:40px 20px 
 .card p{font-size:.8rem;margin-bottom:10px;}
 .card button{padding:10px 20px;border:none;border-radius:10px;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));color:#000;font-weight:600;cursor:pointer;transition:.3s;}
 .card button:hover{transform:scale(1.05);}
-
-/* ===== TOGGLES ===== */
 .toggle{position:fixed;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.2rem;z-index:10;}
 #themeToggle{top:20px;right:20px;}
 #langToggle{top:70px;right:20px;}
 #sidebarToggle{top:120px;left:20px;position:fixed;z-index:20;cursor:pointer;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));display:flex;align-items:center;justify-content:center;}
-
-/* ===== SIDEBAR ===== */
 #overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.3s;z-index:15;}
 #overlay.active{opacity:1;pointer-events:auto;}
 #sidebar{position:fixed;top:0;left:0;width:300px;height:100vh;background:var(--bg1);padding:20px;transform:translateX(-110%);transition:.45s cubic-bezier(.22,1,.36,1);z-index:20;display:flex;flex-direction:column;overflow-y:auto;}
@@ -50,12 +41,11 @@ section{display:flex;flex-direction:column;align-items:center;padding:40px 20px 
 #sidebar ul{list-style:none;padding:0;margin-top:20px;}
 #sidebar ul li a{display:block;width:100%;padding:10px;background:var(--card);border-radius:8px;text-decoration:none;color:var(--text);transition:.25s;}
 #sidebar ul li a:hover{background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));color:#000;}
-
-/* ===== FOOTER ===== */
 footer{text-align:center;padding:40px 20px;font-size:.9em;color:rgba(255,255,255,.6);}
-
-/* ===== PARTICLES ===== */
 #particles{position:fixed;inset:0;z-index:-1;}
+form{display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px;margin-top:15px;}
+form input, form select{padding:10px;border-radius:8px;border:none;outline:none;}
+form button{margin-top:10px;}
 </style>
 </head>
 <body>
@@ -80,7 +70,7 @@ footer{text-align:center;padding:40px 20px;font-size:.9em;color:rgba(255,255,255
 
 <header>
 <h1>Sklep Rang</h1>
-<p>Kup rangi za kasę</p>
+<p>Kup rangi za kasę serwera (formularz poniżej)</p>
 <div class="btns">
 <a href="index.html" class="btn primary">🏠 Strona główna</a>
 <a href="index2.html" class="btn secondary">🗝️ Klucze</a>
@@ -92,24 +82,32 @@ footer{text-align:center;padding:40px 20px;font-size:.9em;color:rgba(255,255,255
 <div class="card">
 <h3>VIP</h3>
 <p>Dostęp do dodatkowych komend i przedmiotów.</p>
-<button onclick="buyRank('VIP', 'https://www.paysafecard.com/pl-pl/kup/')">Kup za 500💰</button>
+<form id="vipForm">
+<input type="text" name="nickname" placeholder="Twój nick" required>
+<button type="submit">Kup VIP</button>
+</form>
 </div>
 <div class="card">
 <h3>SVIP</h3>
 <p>Szybszy login, unikalne funkcje i więcej przywilejów.</p>
-<button onclick="buyRank('SVIP', 'https://www.paysafecard.com/pl-pl/kup/')">Kup za 1000💰</button>
+<form id="svipForm">
+<input type="text" name="nickname" placeholder="Twój nick" required>
+<button type="submit">Kup SVIP</button>
+</form>
 </div>
 <div class="card">
-<h3>NeoNCraf</h3>
-<p>Dosatajesz 2 klucze NeoNcraf codziennie + co tydzień dostajesz klucz do świątecznej.</p>
-<button onclick="buyRank('NeoNCraf', 'https://www.paysafecard.com/pl-pl/kup/')">Kup za 5000💰</button>
+<h3>Admin</h3>
+<p>Pełne uprawnienia do zarządzania serwerem.</p>
+<form id="adminForm">
+<input type="text" name="nickname" placeholder="Twój nick" required>
+<button type="submit">Kup Admin</button>
+</form>
 </div>
 </div>
 </section>
 
 <footer>© 2025 NeoNCraf • Sklep Rang</footer>
 
-<!-- AUDIO -->
 <audio id="menuMusic" loop>
   <source src="audio/menu1.mp3" type="audio/mpeg">
 </audio>
@@ -117,7 +115,11 @@ footer{text-align:center;padding:40px 20px;font-size:.9em;color:rgba(255,255,255
   <source src="audio/rain_wind.mp3" type="audio/mpeg">
 </audio>
 
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
+(function(){emailjs.init('r691gzcuVJdPdcXdi');})(); // Podmień na swój UserID
+
 // ===== PRELOADER =====
 window.addEventListener('load',()=>{
 const p=document.getElementById('preloader');
@@ -141,8 +143,8 @@ overlay.onclick=()=>{sidebar.classList.remove('open');overlay.classList.remove('
 // ===== PARTICLES =====
 const c=document.getElementById('particles'),x=c.getContext('2d');
 function resize(){c.width=innerWidth;c.height=innerHeight;}resize();onresize=resize;
-let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
-function anim(){x.clearRect(0,0,c.width,c.height);p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0});requestAnimationFrame(anim);}
+let pArr=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
+function anim(){x.clearRect(0,0,c.width,c.height);pArr.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0});requestAnimationFrame(anim);}
 anim();
 
 // ===== AUDIO =====
@@ -152,13 +154,18 @@ function playRandomMenu(){const track=menuTracks[Math.floor(Math.random()*menuTr
 playRandomMenu();
 const ambientAudio = document.getElementById('ambient');ambientAudio.volume=0.5;ambientAudio.play().catch(()=>console.log('Autoplay zablokowany'));
 
-// ===== BUY RANK PSC =====
-function buyRank(rank, link){
-  const confirmBuy = confirm(`Czy chcesz kupić rangę ${rank}? Zostaniesz przeniesiony do strony płatności.`);
-  if(confirmBuy){
-    window.open(link, '_blank');
-  }
+// ===== EMAILJS FORMS =====
+function sendEmail(rank, nickname){
+  const templateParams = { rank: rank, nickname: nickname };
+  emailjs.send('service_jv1tbww','template_w3ugow8', templateParams)
+    .then(()=>alert(`✅ Powiadomienie o zakupie ${rank} wysłane!`))
+    .catch(err=>alert('❌ Błąd wysyłania: '+err));
 }
+
+// Podłącz formularze
+document.getElementById('vipForm').addEventListener('submit', e=>{e.preventDefault();sendEmail('VIP', e.target.nickname.value); e.target.reset();});
+document.getElementById('svipForm').addEventListener('submit', e=>{e.preventDefault();sendEmail('SVIP', e.target.nickname.value); e.target.reset();});
+document.getElementById('adminForm').addEventListener('submit', e=>{e.preventDefault();sendEmail('Admin', e.target.nickname.value); e.target.reset();});
 </script>
 </body>
 </html>
