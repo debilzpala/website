@@ -142,7 +142,7 @@ if(!nickname){alert('Wpisz swój nick!');return;}
 
 // Wyślij maila
 const templateParams={rank:rank,nickname:nickname};
-emailjs.send('service_jv1tbww','template_w3ugow8',templateParams)
+emailjs.send('r691gzcuVJdPdcXdi','template_w3ugow8',templateParams)
 .then(()=>alert(`✅ Powiadomienie o zakupie ${rank} wysłane!`))
 .catch(err=>{console.error(err);alert('❌ Błąd wysyłania: '+(err.text||JSON.stringify(err)));});
 
