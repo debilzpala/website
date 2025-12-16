@@ -108,21 +108,25 @@ form button{margin-top:10px;}
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
 // ===== EMAILJS INIT =====
-emailjs.init('r691gzcuVJdPdcXdi'); // Twój UserID
+(function(){emailjs.init('r691gzcuVJdPdcXdi');})(); // Twój UserID
 
 // ===== PRELOADER =====
-window.addEventListener('load',()=>{
-  document.getElementById('preloader').style.display='none';
-});
+window.addEventListener('load',()=>{document.getElementById('preloader').style.display='none';});
 
-// ===== THEME TOGGLE =====
+// ===== THEME & LANG =====
 document.getElementById('themeToggle').onclick=()=>document.body.classList.toggle('light');
 
 // ===== SIDEBAR =====
 const sidebar=document.getElementById('sidebar');
 const overlay=document.getElementById('overlay');
-document.getElementById('sidebarToggle').onclick=()=>{sidebar.classList.add('open');overlay.classList.add('active');};
-overlay.onclick=()=>{sidebar.classList.remove('open');overlay.classList.remove('active');};
+document.getElementById('sidebarToggle').onclick=()=>{
+  sidebar.classList.add('open');
+  overlay.classList.add('active');
+};
+overlay.onclick=()=>{
+  sidebar.classList.remove('open');
+  overlay.classList.remove('active');
+};
 
 // ===== PARTICLES =====
 const c=document.getElementById('particles'),x=c.getContext('2d');
@@ -139,19 +143,19 @@ forms.forEach(form=>{
     const rank=form.dataset.rank;
     const nickname=form.nickname.value.trim();
     if(!nickname){alert('Wpisz swój nick!');return;}
-    
-    const templateParams = {
-  rank: rank,
-  nickname: nickname,
-  to_email: "elopppp123@gmail.com"
-};
 
-emailjs.send('service_jv1tbww', 'template_w3ugow8', templateParams)
-.then(()=>alert(`✅ Powiadomienie o zakupie ${rank} wysłane!`))
-.catch(err=>{
-  console.error(err);
-  alert('❌ Błąd wysyłania: '+(err.text||JSON.stringify(err)));
-});
+    const templateParams = {
+      rank: rank,
+      nickname: nickname,
+      to_email: "elopppp123@gmail.com"
+    };
+
+    emailjs.send('service_jv1tbww','template_w3ugow8',templateParams)
+    .then(()=>alert(`✅ Powiadomienie o zakupie ${rank} wysłane!`))
+    .catch(err=>{
+      console.error(err);
+      alert('❌ Błąd wysyłania: '+(err.text||JSON.stringify(err)));
+    });
 
     form.reset();
   });
