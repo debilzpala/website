@@ -7,11 +7,8 @@
 <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Minecraft','Inter',sans-serif;}
-body{overflow-x:hidden;cursor:url('https://i.imgur.com/ZX1aXbX.png'),auto;}
-:root{
---bg1:#1b1f3b; --bg2:#0a0d1a; --text:#fff; --card:rgba(255,255,255,.05);
---primary-color:#6cf; --secondary-color:#9f6cff;
-}
+body{overflow-x:hidden;}
+:root{--bg1:#1b1f3b;--bg2:#0a0d1a;--text:#fff;--card:rgba(255,255,255,.05);--primary-color:#6cf;--secondary-color:#9f6cff;}
 body.light{--bg1:#f4f6ff;--bg2:#dfe3ff;--text:#000;--card:rgba(0,0,0,.05);}
 body{background:radial-gradient(circle at top,var(--bg1),var(--bg2));color:var(--text);line-height:1.6;transition:.5s;}
 header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px;}
@@ -70,7 +67,7 @@ form button{margin-top:10px;}
 
 <header>
 <h1>Sklep Rang</h1>
-<p>Kup rangi za kasę serwera (formularz poniżej)</p>
+<p>Kup rangi – wpisz swój nick i wybierz rangę</p>
 <div class="btns">
 <a href="index.html" class="btn primary">🏠 Strona główna</a>
 <a href="index2.html" class="btn secondary">🗝️ Klucze</a>
@@ -80,27 +77,27 @@ form button{margin-top:10px;}
 <section>
 <div class="features">
 <div class="card">
-<h3>VIP</h3>
-<p>Dostęp do dodatkowych komend i przedmiotów.</p>
-<form id="vipForm">
+<h3>VIP – 30 000💰</h3>
+<p>Dodatkowe komendy i bonusy.</p>
+<form class="buyForm" data-rank="VIP">
 <input type="text" name="nickname" placeholder="Twój nick" required>
 <button type="submit">Kup VIP</button>
 </form>
 </div>
 <div class="card">
-<h3>SVIP</h3>
-<p>Szybszy login, unikalne funkcje i więcej przywilejów.</p>
-<form id="svipForm">
+<h3>SVIP – 50 000💰</h3>
+<p>Szybszy login, unikalne funkcje.</p>
+<form class="buyForm" data-rank="SVIP">
 <input type="text" name="nickname" placeholder="Twój nick" required>
 <button type="submit">Kup SVIP</button>
 </form>
 </div>
 <div class="card">
-<h3>Admin</h3>
-<p>Pełne uprawnienia do zarządzania serwerem.</p>
-<form id="adminForm">
+<h3>NeonCraf – 100 000💰</h3>
+<p>Pełny pakiet VIP + wyjątkowe przywileje.</p>
+<form class="buyForm" data-rank="NeonCraf">
 <input type="text" name="nickname" placeholder="Twój nick" required>
-<button type="submit">Kup Admin</button>
+<button type="submit">Kup NeonCraf</button>
 </form>
 </div>
 </div>
@@ -108,31 +105,18 @@ form button{margin-top:10px;}
 
 <footer>© 2025 NeoNCraf • Sklep Rang</footer>
 
-<audio id="menuMusic" loop>
-  <source src="audio/menu1.mp3" type="audio/mpeg">
-</audio>
-<audio id="ambient" loop>
-  <source src="audio/rain_wind.mp3" type="audio/mpeg">
-</audio>
-
-<!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-(function(){emailjs.init('r691gzcuVJdPdcXdi');})(); // Podmień na swój UserID
+// ===== EMAILJS INIT =====
+(function(){emailjs.init('service_jv1tbww');})(); // Podmień na swój UserID
 
 // ===== PRELOADER =====
 window.addEventListener('load',()=>{
-const p=document.getElementById('preloader');
-setTimeout(()=>{p.style.opacity='0';setTimeout(()=>p.style.display='none',500);},2000);
+document.getElementById('preloader').style.display='none';
 });
 
 // ===== THEME & LANG =====
 document.getElementById('themeToggle').onclick=()=>document.body.classList.toggle('light');
-let lang='pl';
-document.getElementById('langToggle').onclick=()=>{
-lang=lang==='pl'?'en':'pl';
-document.querySelectorAll('[data-pl]').forEach(e=>{e.innerText=e.dataset[lang];});
-};
 
 // ===== SIDEBAR =====
 const sidebar=document.getElementById('sidebar');
@@ -147,25 +131,24 @@ let pArr=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.
 function anim(){x.clearRect(0,0,c.width,c.height);pArr.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0});requestAnimationFrame(anim);}
 anim();
 
-// ===== AUDIO =====
-const menuTracks = ['audio/menu1.mp3','audio/menu2.mp3','audio/menu3.mp3'];
-const menuAudio = document.getElementById('menuMusic');
-function playRandomMenu(){const track=menuTracks[Math.floor(Math.random()*menuTracks.length)];menuAudio.src=track;menuAudio.play();}
-playRandomMenu();
-const ambientAudio = document.getElementById('ambient');ambientAudio.volume=0.5;ambientAudio.play().catch(()=>console.log('Autoplay zablokowany'));
-
 // ===== EMAILJS FORMS =====
-function sendEmail(rank, nickname){
-  const templateParams = { rank: rank, nickname: nickname };
-  emailjs.send('service_jv1tbww','template_w3ugow8', templateParams)
-    .then(()=>alert(`✅ Powiadomienie o zakupie ${rank} wysłane!`))
-    .catch(err=>alert('❌ Błąd wysyłania: '+err));
-}
+const forms=document.querySelectorAll('.buyForm');
+forms.forEach(form=>{
+form.addEventListener('submit',e=>{
+e.preventDefault();
+const rank=form.dataset.rank;
+const nickname=form.nickname.value.trim();
+if(!nickname){alert('Wpisz swój nick!');return;}
 
-// Podłącz formularze
-document.getElementById('vipForm').addEventListener('submit', e=>{e.preventDefault();sendEmail('VIP', e.target.nickname.value); e.target.reset();});
-document.getElementById('svipForm').addEventListener('submit', e=>{e.preventDefault();sendEmail('SVIP', e.target.nickname.value); e.target.reset();});
-document.getElementById('adminForm').addEventListener('submit', e=>{e.preventDefault();sendEmail('Admin', e.target.nickname.value); e.target.reset();});
+// Wyślij maila
+const templateParams={rank:rank,nickname:nickname};
+emailjs.send('service_jv1tbww','template_w3ugow8',templateParams)
+.then(()=>alert(`✅ Powiadomienie o zakupie ${rank} wysłane!`))
+.catch(err=>{console.error(err);alert('❌ Błąd wysyłania: '+(err.text||JSON.stringify(err)));});
+
+form.reset();
+});
+});
 </script>
 </body>
 </html>
