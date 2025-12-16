@@ -108,14 +108,14 @@ form button{margin-top:10px;}
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
 // ===== EMAILJS INIT =====
-(function(){emailjs.init('r691gzcuVJdPdcXdi');})(); // Podmień na swój UserID
+emailjs.init('r691gzcuVJdPdcXdi'); // Twój UserID
 
 // ===== PRELOADER =====
 window.addEventListener('load',()=>{
-document.getElementById('preloader').style.display='none';
+  document.getElementById('preloader').style.display='none';
 });
 
-// ===== THEME & LANG =====
+// ===== THEME TOGGLE =====
 document.getElementById('themeToggle').onclick=()=>document.body.classList.toggle('light');
 
 // ===== SIDEBAR =====
@@ -134,20 +134,23 @@ anim();
 // ===== EMAILJS FORMS =====
 const forms=document.querySelectorAll('.buyForm');
 forms.forEach(form=>{
-form.addEventListener('submit',e=>{
-e.preventDefault();
-const rank=form.dataset.rank;
-const nickname=form.nickname.value.trim();
-if(!nickname){alert('Wpisz swój nick!');return;}
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const rank=form.dataset.rank;
+    const nickname=form.nickname.value.trim();
+    if(!nickname){alert('Wpisz swój nick!');return;}
+    
+    const templateParams={rank:rank,nickname:nickname};
 
-// Wyślij maila
-const templateParams={rank:rank,nickname:nickname};
-emailjs.send('service_jv1tbww','template_w3ugow8',templateParams)
-.then(()=>alert(`✅ Powiadomienie o zakupie ${rank} wysłane!`))
-.catch(err=>{console.error(err);alert('❌ Błąd wysyłania: '+(err.text||JSON.stringify(err)));});
+    emailjs.send('service_jv1tbww','template_w3ugow8',templateParams)
+    .then(()=>alert(`✅ Powiadomienie o zakupie ${rank} wysłane!`))
+    .catch(err=>{
+      console.error(err);
+      alert('❌ Błąd wysyłania: '+(err.text||JSON.stringify(err)));
+    });
 
-form.reset();
-});
+    form.reset();
+  });
 });
 </script>
 </body>
