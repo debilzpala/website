@@ -3,232 +3,222 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeoNCraf – Minecraft</title>
+<title>NeoNCraf – Serwer Minecraft</title>
 <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
 <style>
-/* ===== PIXEL CURSOR ===== */
-body,*{cursor:url('https://i.imgur.com/ZX1aXbX.png'),auto}
+/* ===== RESET ===== */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Minecraft','Inter',sans-serif;}
 
-/* ===== ROOT VARIABLES ===== */
+/* ===== COLORS ===== */
 :root{
---bg:#0a0d1a;
---card:rgba(255,255,255,.06);
+--bg1:#1b1f3b;
+--bg2:#0a0d1a;
 --text:#fff;
---accent:#6cf;
+--card:rgba(255,255,255,.05);
+--primary-color:#6cf;
+--secondary-color:#9f6cff;
 }
-body.light{--bg:#f3f6ff;--card:#fff;--text:#111;}
-body.legacy{background:#000;color:#fff;}
-body.legacy header{justify-content:flex-start;padding-top:120px;}
-body.legacy h1{font-size:4rem;animation:none;}
-body.legacy .btn{width:260px;justify-content:center;border-radius:0;background:#555;color:#fff;box-shadow:inset 0 -4px #333;}
-body.legacy .btn:hover{background:#666;}
-body.legacy footer{display:none;}
+body.light{
+--bg1:#f4f6ff;
+--bg2:#dfe3ff;
+--text:#000;
+--card:rgba(0,0,0,.05);
+}
+body{background:radial-gradient(circle at top,var(--bg1),var(--bg2));color:var(--text);line-height:1.6;transition:.5s;font-family:'Minecraft','Inter',sans-serif;overflow-x:hidden;cursor:url('https://i.imgur.com/ZX1aXbX.png'),auto;}
 
-body{background:var(--bg);color:var(--text);transition:.4s;overflow-x:hidden;font-family:'Minecraft','Inter',sans-serif}
+/* ===== HEADER ===== */
+header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px;}
+h1{font-size:clamp(3rem,7vw,6rem);font-weight:900;margin:10px 0 25px;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+header p:first-of-type{font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;opacity:.8;}
+.btns{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-bottom:25px;}
+.btn{padding:14px 28px;border-radius:14px;text-decoration:none;font-weight:600;transition:.25s;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,.2);}
+.btn:hover{transform:scale(1.08) rotate(-1deg);box-shadow:0 15px 40px rgba(0,0,0,.4);}
+.primary{background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));color:#000;}
+.secondary{border:2px solid var(--primary-color);color:var(--primary-color);background:none;}
+.ip{font-size:1.2rem;color:var(--secondary-color);margin-bottom:20px;}
 
-/* HEADER */
-header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px}
-h1{font-size:clamp(3rem,7vw,6rem);background:linear-gradient(90deg,#6cf,#9f6cff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.btns{display:flex;gap:20px;margin:25px 0}
-.btn{padding:14px 30px;border-radius:14px;cursor:pointer;transition:.25s;text-decoration:none;font-weight:600}
+/* ===== SECTIONS ===== */
+section{display:flex;flex-direction:column;align-items:center;padding:40px 20px 80px;max-width:100%;margin:auto;}
+#status-container{width:clamp(300px,80%,400px);margin:0 auto 60px;text-align:center;padding:30px;background:var(--card);border-radius:24px;backdrop-filter:blur(14px);box-shadow:0 10px 30px rgba(0,0,0,.3);}
+.features{display:flex;justify-content:center;gap:30px;width:100%;max-width:100vw;flex-wrap:nowrap;overflow-x:auto;padding:0 20px 15px 20px;margin:0 auto;}
+.card{min-width:100px;min-height:200px;flex-shrink:0;background:var(--card);border-radius:24px;padding:15px;backdrop-filter:blur(14px);transition:.25s;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+.card h3{font-size:1rem;margin-bottom:8px;}
+.card p{font-size:.8rem;}
+.card:hover{transform:translateY(-10px) scale(1.03);box-shadow:0 10px 20px rgba(0,0,0,.3);}
+@media (max-width:600px){.features{flex-wrap:wrap;}.card{min-width:100%;min-height:200px;}}
 
-/* SIDEBAR */
-#playersToggle{position:fixed;top:120px;left:15px;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#6cf,#9f6cff);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:300}
-#overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.3s;z-index:200}
-#overlay.active{opacity:1;pointer-events:auto}
-#sidebar{position:fixed;top:0;left:0;width:300px;height:100vh;background:var(--bg);padding:20px;transform:translateX(-110%);transition:.45s cubic-bezier(.22,1,.36,1);z-index:250;display:flex;flex-direction:column}
-#sidebar.open{transform:translateX(0)}
-.player{display:flex;align-items:center;gap:10px;background:var(--card);padding:8px;border-radius:10px;margin-bottom:8px;font-size:.8rem;opacity:0;transform:translateX(-20px);animation:in .4s forwards;animation-delay:calc(var(--i)*60ms);}
-@keyframes in{to{opacity:1;transform:none}}
-.avatar{width:32px;height:32px;border-radius:6px;animation:glow 2s infinite}
-@keyframes glow{50%{box-shadow:0 0 10px var(--accent)}}
-.avatar:hover{transform:scale(1.15)}
-.badge{margin-left:auto;font-size:.6rem;background:#ffd700;color:#000;padding:2px 6px;border-radius:6px}
+/* ===== TOGGLES ===== */
+.toggle{position:fixed;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.2rem;z-index:10;}
+#themeToggle{top:20px;right:20px;}
+#langToggle{top:70px;right:20px;}
+#playersToggle{top:120px;left:20px;position:fixed;z-index:20;cursor:pointer;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));display:flex;align-items:center;justify-content:center;}
 
-/* FOOTER */
-footer{text-align:center;padding:30px;opacity:.5}
-.toggle{position:fixed;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.2rem;z-index:300;right:20px}
-#themeToggle{top:20px} 
-#legacyToggle{top:70px}
-#soundToggle{top:120px}
+/* ===== SIDEBAR ===== */
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.3s;z-index:15;}
+#overlay.active{opacity:1;pointer-events:auto;}
+#sidebar{position:fixed;top:0;left:0;width:300px;height:100vh;background:var(--bg1);padding:20px;transform:translateX(-110%);transition:.45s cubic-bezier(.22,1,.36,1);z-index:20;display:flex;flex-direction:column;overflow-y:auto;}
+#sidebar.open{transform:translateX(0);}
+.player{display:flex;align-items:center;gap:10px;background:var(--card);padding:8px;border-radius:10px;margin-bottom:8px;font-size:.8rem;opacity:0;transform:translateX(-20px);animation:fadeIn .4s forwards;animation-delay:calc(var(--i)*60ms);}
+@keyframes fadeIn{to{opacity:1;transform:none;}}
+.avatar{width:32px;height:32px;border-radius:6px;animation:glow 2s infinite;}
+@keyframes glow{50%{box-shadow:0 0 10px var(--primary-color);}}
+.badge{margin-left:auto;font-size:.6rem;background:#ffd700;color:#000;padding:2px 6px;border-radius:6px;}
 
-/* BACKGROUND CANVAS */
-#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
+/* ===== FOOTER ===== */
+footer{text-align:center;padding:40px 20px;font-size:.9em;color:rgba(255,255,255,.6);}
 
-/* CLOUDS */
-.cloud{position:absolute;width:80px;height:40px;background:rgba(255,255,255,0.8);border-radius:40px;filter:blur(2px);z-index:0;pointer-events:none;}
+/* ===== CANVAS BACKGROUND ===== */
+#particles,#bgCanvas{position:fixed;inset:0;z-index:-1;}
+.cloud{position:absolute;width:80px;height:40px;background:rgba(255,255,255,0.8);border-radius:40px;filter:blur(2px);pointer-events:none;}
 </style>
 </head>
 <body>
 
-<!-- CANVAS BACKGROUND -->
+<div id="preloader">Ładowanie NeoNCraf...</div>
+<canvas id="particles"></canvas>
 <canvas id="bgCanvas"></canvas>
 
-<!-- AUDIO -->
-<audio id="music" loop></audio>
-<audio id="clickSound"><source src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3" type="audio/mpeg"></audio>
-<audio id="openSound"><source src="https://assets.mixkit.co/sfx/preview/mixkit-game-level-music-689.mp3" type="audio/mpeg"></audio>
-<audio id="rainSound" loop><source src="https://cdn.pixabay.com/audio/2022/03/15/audio_6e1f1f6c6a.mp3" type="audio/mpeg"></audio>
-<audio id="windSound" loop><source src="https://cdn.pixabay.com/audio/2021/11/09/audio_4f6a07d96d.mp3" type="audio/mpeg"></audio>
-<audio id="joinSound"><source src="https://assets.mixkit.co/sfx/preview/mixkit-player-level-up-2043.mp3" type="audio/mpeg"></audio>
-
-<!-- TOGGLES -->
 <div id="themeToggle" class="toggle">🌙</div>
-<div id="legacyToggle" class="toggle">🎮</div>
-<div id="soundToggle" class="toggle">🎧</div>
+<div id="langToggle" class="toggle">🌍</div>
 <div id="playersToggle">🎮</div>
 <div id="overlay"></div>
-
-<div id="sidebar">
-<h3>👥 Gracze online</h3>
-<ul id="players"><li>Ładowanie...</li></ul>
-</div>
+<div id="sidebar"><h3>Gracze Online</h3><ul id="players"><li>Ładowanie...</li></ul></div>
 
 <header>
-<p>SERWER MINECRAFT</p>
-<h1>NEONCRAF</h1>
+<p data-pl="NOWOCZESNY SERWER MINECRAFT NOWEJ GENERACJI." data-en="A MODERN NEXT-GENERATION MINECRAFT SERVER.">NOWOCZESNY SERWER MINECRAFT NOWEJ GENERACJI.</p>
+<h1 data-pl="NEONCRAF" data-en="NEONCRAF">NEONCRAF</h1>
 <div class="btns">
-<div class="btn" id="copyIP">SKOPIUJ IP</div>
+<a href="#" id="copyButton" class="btn primary" data-pl="SKOPIUJ IP SERWERA" data-en="COPY SERVER IP">SKOPIUJ IP SERWERA</a>
+<a href="https://discord.gg/Ty9axmj8" target="_blank" class="btn secondary" data-pl="DISCORD" data-en="DISCORD">DISCORD</a>
 </div>
-<p id="ip">neoncraf_mc.aternos.me:34490</p>
+<p class="ip" data-pl="IP: " data-en="IP: ">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
 </header>
-<footer>© 2025 NeoNCraf</footer>
+
+<section>
+<div id="status-container">
+<h3 data-pl="📊 STATUS SERWERA" data-en="📊 SERVER STATUS">📊 STATUS SERWERA</h3>
+<p id="status">Sprawdzanie...</p>
+<p data-pl="👥 GRACZE ONLINE:" data-en="👥 PLAYERS ONLINE:">👥 GRACZE ONLINE:</p>
+<p><span id="playersCount">0 / 0</span></p>
+<p><span id="percent">📊 0%</span></p>
+<div class="creeper"></div>
+</div>
+
+<div class="features">
+<div class="card">
+<h3 data-pl="⚡ WYDAJNOŚĆ" data-en="⚡ PERFORMANCE">⚡ WYDAJNOŚĆ</h3>
+<p data-pl="Stabilny serwer, niski ping i brak lagów – gramy płynnie 24/7." data-en="Stable server, low ping, and no lag – smooth gaming 24/7.">Stabilny serwer, niski ping i brak lagów – gramy płynnie 24/7.</p>
+</div>
+<div class="card">
+<h3 data-pl="🧩 UNIKALNE TRYBY" data-en="🧩 UNIQUE MODES">🧩 UNIKALNE TRYBY</h3>
+<p data-pl="Autorskie systemy, eventy i mechaniki, których nie znajdziesz nigdzie indziej." data-en="Custom systems, events, and mechanics you won't find anywhere else.">Autorskie systemy, eventy i mechaniki, których nie znajdziesz nigdzie indziej.</p>
+</div>
+<div class="card">
+<h3 data-pl="👥 SPOŁECZNOŚĆ" data-en="👥 COMMUNITY">👥 SPOŁECZNOŚĆ</h3>
+<p data-pl="Aktywni gracze, pomocna administracja i świetna atmosfera." data-en="Active players, helpful staff, and a great atmosphere.">Aktywni gracze, pomocna administracja i świetna atmosfera.</p>
+</div>
+<div class="card">
+<h3 data-pl="🔒 BEZPIECZEŃSTWO" data-en="🔒 SECURITY">🔒 BEZPIECZEŃSTWO</h3>
+<p data-pl="Anty-cheat, backupy i ochrona danych graczy." data-en="Anti-cheat, backups, and player data protection.">Anty-cheat, backupy i ochrona danych graczy.</p>
+</div>
+</div>
+</section>
+
+<footer>© 2025 NeoNCraf • Serwer Minecraft</footer>
 
 <script>
-/* ===== CONFIG ===== */
-const SERVER="neoncraf_mc.aternos.me:34490";
-const WEBHOOK_URL="TU_WKLEJ_WEBHOOK_DISCORD";
-const VIPS=["AdminNick","VipNick"];
-let lastStatus=null;
-const joinTimes={};
-let soundEnabled=localStorage.getItem("sound")!=="off";
-let musicStarted=false;
+/* ===== PRELOADER ===== */
+window.addEventListener('load',()=>{
+const p=document.getElementById('preloader');
+setTimeout(()=>{p.style.opacity='0';setTimeout(()=>p.style.display='none',500);},2000);
+});
 
-/* ELEMENTY */
-const music=document.getElementById("music");
-const clickSound=document.getElementById("clickSound");
-const openSound=document.getElementById("openSound");
-const rainSound=document.getElementById("rainSound");
-const windSound=document.getElementById("windSound");
-const joinSound=document.getElementById("joinSound");
-const playersToggle=document.getElementById("playersToggle");
-const overlay=document.getElementById("overlay");
-const sidebar=document.getElementById("sidebar");
-const copyIP=document.getElementById("copyIP");
-const soundToggle=document.getElementById("soundToggle");
-const legacyToggle=document.getElementById("legacyToggle");
-const playersList=document.getElementById("players");
-const themeToggle=document.getElementById("themeToggle");
-
-/* ===== THEME & LEGACY ===== */
-if(localStorage.getItem("theme")==="light") document.body.classList.add("light");
-themeToggle.onclick=()=>{document.body.classList.toggle("light");localStorage.setItem("theme",document.body.classList.contains("light")?"light":"dark");};
-legacyToggle.onclick=()=>{document.body.classList.toggle("legacy");localStorage.setItem("legacy",document.body.classList.contains("legacy")?"on":"off"); playClick();};
-if(localStorage.getItem("legacy")==="on") document.body.classList.add("legacy");
-
-/* ===== SOUND ===== */
-soundToggle.onclick=()=>{
-soundEnabled=!soundEnabled;
-localStorage.setItem("sound",soundEnabled?"on":"off");
-soundToggle.textContent=soundEnabled?"🎧":"🔇";
-playClick();
-if(!soundEnabled) music.pause(),rainSound.pause(),windSound.pause();
-else startMusic();
+/* ===== THEME & LANG ===== */
+const themeToggle=document.getElementById('themeToggle');
+themeToggle.onclick=()=>document.body.classList.toggle('light');
+let lang='pl';
+const langToggle=document.getElementById('langToggle');
+langToggle.onclick=()=>{
+lang=lang==='pl'?'en':'pl';
+document.querySelectorAll('[data-pl]').forEach(e=>{e.innerText=e.dataset[lang];});
 };
-if(!soundEnabled) soundToggle.textContent="🔇";
-
-/* ===== SIDEBAR ===== */
-playersToggle.onclick=()=>{sidebar.classList.add("open");overlay.classList.add("active"); playOpen();}
-overlay.onclick=()=>{sidebar.classList.remove("open");overlay.classList.remove("active"); playOpen();}
+document.querySelectorAll('[data-pl]').forEach(e=>{e.innerText=e.dataset[lang];});
 
 /* ===== COPY IP ===== */
-copyIP.onclick=()=>{navigator.clipboard.writeText(document.getElementById("ip").innerText);copyIP.innerText="✔ SKOPIOWANO"; setTimeout(()=>copyIP.innerText="SKOPIUJ IP",1500); playClick();}
+document.getElementById('copyButton').onclick=(e)=>{
+e.preventDefault();
+navigator.clipboard.writeText(document.getElementById('ip').innerText).then(()=>alert('✅ IP skopiowane'));
+};
 
-/* ===== UI SOUNDS ===== */
-function playClick(){if(!soundEnabled) return; clickSound.currentTime=0; clickSound.play();}
-function playOpen(){if(!soundEnabled) return; openSound.currentTime=0; openSound.play();}
-function startMusic(){if(!soundEnabled || musicStarted) return; playRandomTrack(); rainSound.volume=0.15; windSound.volume=0.1; rainSound.play(); windSound.play(); musicStarted=true;}
+/* ===== STATUS & PLAYERS API ===== */
+let lastStatus=undefined;
+const SERVER='neoncraf_mc.aternos.me:34490';
+const playersCount=document.getElementById('playersCount');
+const percent=document.getElementById('percent');
+const playersList=document.getElementById('players');
 
-/* ===== RANDOM MENU MUSIC ===== */
-const tracks=["https://cdn.pixabay.com/audio/2022/10/30/audio_5c3b84b8a4.mp3","https://cdn.pixabay.com/audio/2022/08/01/audio_91fdd9c15a.mp3","https://cdn.pixabay.com/audio/2021/09/06/audio_3fbe2c6f5b.mp3"];
-function playRandomTrack(){if(!soundEnabled) return; music.src=tracks[Math.floor(Math.random()*tracks.length)]; music.volume=0.25; music.play();}
-music.addEventListener("ended", playRandomTrack);
-
-/* ===== DISCORD WEBHOOK ===== */
-function sendWebhook(msg){if(!WEBHOOK_URL.startsWith("http")) return; fetch(WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:msg})});}
-
-/* ===== FETCH PLAYERS ===== */
-function loadPlayers(){
+function fetchStatus(){
 fetch(`https://api.mcstatus.io/v2/status/java/${SERVER}`)
 .then(r=>r.json())
 .then(d=>{
-playersList.innerHTML="";
-if(lastStatus!==d.online){sendWebhook(d.online?"🟢 **Serwer ONLINE**":"🔴 **Serwer OFFLINE**"); lastStatus=d.online;}
-if(!d.online||!d.players?.list){playersList.innerHTML="<li>Brak graczy</li>";return;}
-d.players.list.forEach((p,i)=>{
-if(!joinTimes[p.name]){joinTimes[p.name]=Date.now(); if(soundEnabled) joinSound.play();}
-let min=Math.floor((Date.now()-joinTimes[p.name])/60000);
-const li=document.createElement("li");
-li.className="player";
-li.style.setProperty("--i",i);
-li.innerHTML=`<img class="avatar" src="https://minotar.net/helm/${p.name}/32"><span>${p.name}<br><small>${min} min</small></span>${VIPS.includes(p.name)?'<span class="badge">VIP</span>':''}`;
+const isOnline=d.online??false;
+const onlinePlayers=d.players?.online??0;
+const maxPlayers=d.players?.max??0;
+let statusDisplay;
+if(isOnline){statusDisplay='🟢 ONLINE';playersCount.innerText=`${onlinePlayers} / ${maxPlayers}`;percent.innerText=maxPlayers?`📊 ${Math.round((onlinePlayers/maxPlayers*100))}%`:'📊 0%';}
+else{statusDisplay='🔴 OFFLINE';playersCount.innerText='0 / 0';percent.innerText='📊 0%';}
+document.getElementById('status').innerText=statusDisplay;
+if(lastStatus!==undefined && lastStatus!==statusDisplay){
+fetch('TU_WKLEJ_WEBHOOK_DISCORD',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:`${statusDisplay} NeoNCraf`})});
+}
+lastStatus=statusDisplay;
+
+playersList.innerHTML='';
+(d.players?.list??[]).forEach(p=>{
+const li=document.createElement('li');li.className='player';
+li.innerHTML=`<img class="avatar" src="https://minotar.net/helm/${p.name}/32"> <span>${p.name}</span>`;
 playersList.appendChild(li);
 });
-}).catch(()=>{playersList.innerHTML="<li>Błąd API</li>";});
+}).catch(()=>{document.getElementById('status').innerText='🟡 OFFLINE (Brak danych)';playersCount.innerText='0 / 0';percent.innerText='📊 0%';});
 }
-loadPlayers();
-setInterval(loadPlayers,30000);
+fetchStatus();
+setInterval(fetchStatus,5000);
 
-/* ===== MOBILE START MUSIC ===== */
-["click","touchstart"].forEach(e=>{window.addEventListener(e,startMusic,{once:true});});
+/* ===== SIDEBAR ===== */
+const sidebar=document.getElementById('sidebar');
+const overlay=document.getElementById('overlay');
+document.getElementById('playersToggle').onclick=()=>{sidebar.classList.add('open');overlay.classList.add('active');};
+overlay.onclick=()=>{sidebar.classList.remove('open');overlay.classList.remove('active');};
 
-/* ===== PIXEL BACKGROUND + DAY/NIGHT + CLOUDS ===== */
-const canvas=document.getElementById("bgCanvas");
-const ctx=canvas.getContext("2d");
-function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
-resizeCanvas();
-window.addEventListener("resize",resizeCanvas);
-const blockSize=32;
-const rows=Math.ceil(canvas.height/blockSize)+1;
-const cols=Math.ceil(canvas.width/blockSize)+1;
-let blocks=[];
-for(let r=0;r<rows;r++){blocks[r]=[];for(let c=0;c<cols;c++){blocks[r][c]=r>rows-4?1:0;}}
-let offset=0;
-let timeOfDay=0;
-const cloudCount=10;
-const clouds=[];
+/* ===== PARTICLES ===== */
+const c=document.getElementById('particles'),x=c.getContext('2d');
+function resize(){c.width=innerWidth;c.height=innerHeight;}resize();onresize=resize;
+let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
+function anim(){x.clearRect(0,0,c.width,c.height);p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0});requestAnimationFrame(anim);}
+anim();
+
+/* ===== BACKGROUND + CLOUDS ===== */
+const canvas=document.getElementById('bgCanvas');const ctx=canvas.getContext('2d');
+function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
+let timeOfDay=0,offset=0;
+const cloudCount=10,clouds=[];
 for(let i=0;i<cloudCount;i++){clouds.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height/2,width:60+Math.random()*40,height:20+Math.random()*20,speed:0.2+Math.random()*0.3});}
-
-function drawBackgroundDayNight(){
+function drawBG(){
 const grd=ctx.createLinearGradient(0,0,0,canvas.height);
-let colorTop,colorBottom;
-if(timeOfDay<0.25){colorTop="#000022";colorBottom="#223344";}
-else if(timeOfDay<0.5){colorTop="#80c0ff";colorBottom="#33aa33";}
-else if(timeOfDay<0.75){colorTop="#223366";colorBottom="#224422";}
-else{colorTop="#000011";colorBottom="#001122";}
-grd.addColorStop(0,colorTop);grd.addColorStop(1,colorBottom);
-ctx.fillStyle=grd;
-ctx.fillRect(0,0,canvas.width,canvas.height);
+if(timeOfDay<0.25){grd.addColorStop(0,'#000022');grd.addColorStop(1,'#223344');}
+else if(timeOfDay<0.5){grd.addColorStop(0,'#80c0ff');grd.addColorStop(1,'#33aa33');}
+else if(timeOfDay<0.75){grd.addColorStop(0,'#223366');grd.addColorStop(1,'#224422');}
+else{grd.addColorStop(0,'#000011');grd.addColorStop(1,'#001122');}
+ctx.fillStyle=grd;ctx.fillRect(0,0,canvas.width,canvas.height);
+clouds.forEach(c=>{ctx.fillStyle='rgba(255,255,255,0.8)';ctx.beginPath();ctx.ellipse(c.x,c.y,c.width,c.height,0,0,2*Math.PI);ctx.fill();c.x+=c.speed;if(c.x>canvas.width+50)c.x=-100;});
+offset+=0.2;timeOfDay+=0.0005;if(timeOfDay>1)timeOfDay=0;
+requestAnimationFrame(drawBG);}
+drawBG();
 
-// chmury
-clouds.forEach(c=>{
-ctx.fillStyle="rgba(255,255,255,0.8)";
-ctx.beginPath();ctx.ellipse(c.x,c.y,c.width,c.height,0,0,2*Math.PI);ctx.fill();
-c.x+=c.speed;if(c.x>canvas.width+50)c.x=-100;
-});
-
-// trawa
-for(let r=rows-4;r<rows;r++){
-for(let col=0;col<cols;col++){
-ctx.fillStyle="#33aa33";
-ctx.fillRect(col*blockSize,(r*blockSize+offset)%canvas.height,blockSize,blockSize);
-}}
-offset+=0.2;
-timeOfDay+=0.0005;if(timeOfDay>1) timeOfDay=0;
-
-requestAnimationFrame(drawBackgroundDayNight);
-}
-drawBackgroundDayNight();
+/* ===== LANGUAGE SWITCH ===== */
+function applyLang(){document.querySelectorAll('[data-pl]').forEach(e=>{e.innerText=e.dataset[lang];});}applyLang();
 </script>
 </body>
 </html>
