@@ -140,14 +140,18 @@ forms.forEach(form=>{
     const nickname=form.nickname.value.trim();
     if(!nickname){alert('Wpisz swój nick!');return;}
     
-    const templateParams={rank:rank,nickname:nickname};
+    const templateParams = {
+  rank: rank,
+  nickname: nickname,
+  to_email: "elopppp123@gmail.com"
+};
 
-    emailjs.send('service_jv1tbww','template_w3ugow8',templateParams)
-    .then(()=>alert(`✅ Powiadomienie o zakupie ${rank} wysłane!`))
-    .catch(err=>{
-      console.error(err);
-      alert('❌ Błąd wysyłania: '+(err.text||JSON.stringify(err)));
-    });
+emailjs.send('service_jv1tbww', 'template_w3ugow8', templateParams)
+.then(()=>alert(`✅ Powiadomienie o zakupie ${rank} wysłane!`))
+.catch(err=>{
+  console.error(err);
+  alert('❌ Błąd wysyłania: '+(err.text||JSON.stringify(err)));
+});
 
     form.reset();
   });
