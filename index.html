@@ -6,6 +6,7 @@
 <title>NeoNCraf – Serwer Minecraft</title>
 <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
 <style>
+/* ===== RESET ===== */
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Minecraft','Inter',sans-serif;}
 body{overflow-x:hidden;cursor:url('https://i.imgur.com/ZX1aXbX.png'),auto;}
 :root{
@@ -23,6 +24,8 @@ body.light{
 --card:rgba(0,0,0,.05);
 }
 body{background:radial-gradient(circle at top,var(--bg1),var(--bg2));color:var(--text);line-height:1.6;transition:.5s;}
+
+/* ===== HEADER ===== */
 header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px;}
 h1{font-size:clamp(3rem,7vw,6rem);font-weight:900;margin:10px 0 25px;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:float 3s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
@@ -33,6 +36,8 @@ header p:first-of-type{font-size:1.1rem;text-transform:uppercase;letter-spacing:
 .primary{background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));color:#000;}
 .secondary{border:2px solid var(--primary-color);color:var(--primary-color);background:none;}
 .ip{font-size:1.2rem;color:var(--secondary-color);margin-bottom:20px;}
+
+/* ===== SECTIONS ===== */
 section{display:flex;flex-direction:column;align-items:center;padding:40px 20px 80px;max-width:100%;margin:auto;}
 #status-container{width:clamp(300px,80%,400px);margin:0 auto 60px;text-align:center;padding:30px;background:var(--card);border-radius:24px;backdrop-filter:blur(14px);box-shadow:0 10px 30px rgba(0,0,0,.3);}
 .features{display:flex;justify-content:center;gap:30px;width:100%;max-width:100vw;flex-wrap:nowrap;overflow-x:auto;padding:0 20px 15px 20px;margin:0 auto;}
@@ -41,10 +46,14 @@ section{display:flex;flex-direction:column;align-items:center;padding:40px 20px 
 .card p{font-size:.8rem;}
 .card:hover{transform:translateY(-10px) scale(1.03);box-shadow:0 10px 20px rgba(0,0,0,.3);}
 @media (max-width:600px){.features{flex-wrap:wrap;}.card{min-width:100%;min-height:200px;}}
+
+/* ===== TOGGLES ===== */
 .toggle{position:fixed;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.2rem;z-index:10;}
 #themeToggle{top:20px;right:20px;}
 #langToggle{top:70px;right:20px;}
 #playersToggle{top:120px;left:20px;position:fixed;z-index:20;cursor:pointer;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));display:flex;align-items:center;justify-content:center;}
+
+/* ===== SIDEBAR ===== */
 #overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.3s;z-index:15;}
 #overlay.active{opacity:1;pointer-events:auto;}
 #sidebar{position:fixed;top:0;left:0;width:300px;height:100vh;background:var(--bg1);padding:20px;transform:translateX(-110%);transition:.45s cubic-bezier(.22,1,.36,1);z-index:20;display:flex;flex-direction:column;overflow-y:auto;}
@@ -52,10 +61,13 @@ section{display:flex;flex-direction:column;align-items:center;padding:40px 20px 
 #sidebar ul{list-style:none;padding:0;margin-top:20px;}
 #sidebar ul li a{display:block;width:100%;padding:10px;background:var(--card);border-radius:8px;text-decoration:none;color:var(--text);transition:.25s;}
 #sidebar ul li a:hover{background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));color:#000;}
+
+/* ===== FOOTER ===== */
 footer{text-align:center;padding:40px 20px;font-size:.9em;color:rgba(255,255,255,.6);}
+
+/* ===== CANVAS BACKGROUND ===== */
 #particles,#bgCanvas{position:fixed;inset:0;z-index:-1;}
-.notification{position:fixed;top:20px;right:20px;padding:12px 20px;border-radius:12px;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));color:#000;font-weight:700;opacity:0;transform:translateY(-30px);transition:.5s;}
-.notification.show{opacity:1;transform:translateY(0);}
+.cloud{position:absolute;width:80px;height:40px;background:rgba(255,255,255,0.8);border-radius:40px;filter:blur(2px);pointer-events:none;}
 </style>
 </head>
 <body>
@@ -83,10 +95,12 @@ footer{text-align:center;padding:40px 20px;font-size:.9em;color:rgba(255,255,255
 <p data-pl="NOWOCZESNY SERWER MINECRAFT NOWEJ GENERACJI." data-en="A MODERN NEXT-GENERATION MINECRAFT SERVER.">NOWOCZESNY SERWER MINECRAFT NOWEJ GENERACJI.</p>
 <h1 data-pl="NEONCRAF" data-en="NEONCRAF">NEONCRAF</h1>
 <div class="btns">
-<a href="#" id="copyButton" class="btn primary" data-pl="SKOPIUJ IP SERWERA" data-en="COPY SERVER IP">SKOPIUJ IP SERWERA</a>
+<button onclick="navigator.clipboard.writeText('NeoNCraf_mc.aternos.me'); alert('Skopiowano IP!')">
+    Kopiuj IP: NEoNCraf_mc.aternos.me
+</button>
 <a href="https://discord.gg/Ty9axmj8" target="_blank" class="btn secondary" data-pl="DISCORD" data-en="DISCORD">DISCORD</a>
 </div>
-<p class="ip" data-pl="IP: " data-en="IP: ">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
+<p class="ip" data-pl="IP:NeoNCraf_mc.aternos.me:34490" data-en="IP:NeoNCraf_mc.aternos.me:34490 ">IP: <span id="ip">neoncraf_mc.aternos.me:34490</span></p>
 </header>
 
 <section>
@@ -96,6 +110,7 @@ footer{text-align:center;padding:40px 20px;font-size:.9em;color:rgba(255,255,255
 <p data-pl="👥 GRACZE ONLINE:" data-en="👥 PLAYERS ONLINE:">👥 GRACZE ONLINE:</p>
 <p><span id="playersCount">0 / 0</span></p>
 <p><span id="percent">📊 0%</span></p>
+<div class="creeper"></div>
 </div>
 
 <div class="features">
@@ -120,7 +135,16 @@ footer{text-align:center;padding:40px 20px;font-size:.9em;color:rgba(255,255,255
 
 <footer>© 2025 NeoNCraf • Serwer Minecraft</footer>
 
-<div id="notification" class="notification"></div>
+<!-- AUDIO -->
+<audio id="menuMusic" loop>
+  <source src="audio/menu1.mp3" type="audio/mpeg">
+</audio>
+<audio id="ambient" loop>
+  <source src="audio/rain_wind.mp3" type="audio/mpeg">
+</audio>
+<audio id="playerJoin">
+  <source src="audio/player_join.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 // ===== PRELOADER =====
@@ -139,17 +163,9 @@ document.querySelectorAll('[data-pl]').forEach(e=>{e.innerText=e.dataset[lang];}
 document.querySelectorAll('[data-pl]').forEach(e=>{e.innerText=e.dataset[lang];});
 
 // ===== COPY IP =====
-const clickSound=new Audio('https://www.myinstants.com/media/sounds/minecraft_click.mp3');
-function showNotification(msg){
-const notif=document.getElementById('notification');
-notif.textContent=msg;
-notif.classList.add('show');
-clickSound.play();
-setTimeout(()=>notif.classList.remove('show'),3000);
-}
 document.getElementById('copyButton').onclick=(e)=>{
 e.preventDefault();
-navigator.clipboard.writeText(document.getElementById('ip').innerText).then(()=>showNotification('✅ IP skopiowane!'));
+navigator.clipboard.writeText(document.getElementById('ip').innerText).then(()=>alert('✅ IP skopiowane'));
 };
 
 // ===== SIDEBAR =====
@@ -165,14 +181,32 @@ let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.hei
 function anim(){x.clearRect(0,0,c.width,c.height);p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0});requestAnimationFrame(anim);}
 anim();
 
-// ===== BACKGROUND =====
+// ===== BACKGROUND + CLOUDS =====
 const canvas=document.getElementById('bgCanvas');const ctx=canvas.getContext('2d');
 function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}
 resizeCanvas();window.addEventListener('resize',resizeCanvas);
+let timeOfDay=0,offset=0;
+const cloudCount=10,clouds=[];
+for(let i=0;i<cloudCount;i++){clouds.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height/2,width:60+Math.random()*40,height:20+Math.random()*20,speed:0.2+Math.random()*0.3});}
+function drawBG(){
+const grd=ctx.createLinearGradient(0,0,0,canvas.height);
+if(timeOfDay<0.25){grd.addColorStop(0,'#000022');grd.addColorStop(1,'#223344');}
+else if(timeOfDay<0.5){grd.addColorStop(0,'#80c0ff');grd.addColorStop(1,'#33aa33');}
+else if(timeOfDay<0.75){grd.addColorStop(0,'#223366');grd.addColorStop(1,'#224422');}
+else{grd.addColorStop(0,'#000011');grd.addColorStop(1,'#001122');}
+ctx.fillStyle=grd;ctx.fillRect(0,0,canvas.width,canvas.height);
+clouds.forEach(c=>{ctx.fillStyle='rgba(255,255,255,0.8)';ctx.beginPath();ctx.ellipse(c.x,c.y,c.width,c.height,0,0,2*Math.PI);ctx.fill();c.x+=c.speed;if(c.x>canvas.width+50)c.x=-100;});
+offset+=0.2;timeOfDay+=0.0005;if(timeOfDay>1)timeOfDay=0;
+requestAnimationFrame(drawBG);}
+drawBG();
 
 // ===== AUDIO =====
-const playerJoin=new Audio('audio/player_join.mp3');
-function playPlayerJoin(){playerJoin.play();}
+const menuTracks = ['audio/menu1.mp3','audio/menu2.mp3','audio/menu3.mp3'];
+const menuAudio = document.getElementById('menuMusic');
+function playRandomMenu(){const track=menuTracks[Math.floor(Math.random()*menuTracks.length)];menuAudio.src=track;menuAudio.play();}
+playRandomMenu();
+const ambientAudio = document.getElementById('ambient');ambientAudio.volume=0.5;ambientAudio.play().catch(()=>console.log('Autoplay zablokowany'));
+function playPlayerJoin(){document.getElementById('playerJoin').play();}
 
 // ===== STATUS API =====
 let lastStatus;
@@ -190,12 +224,14 @@ let statusDisplay;
 if(isOnline){statusDisplay='🟢 ONLINE';playersCount.innerText=`${onlinePlayers} / ${maxPlayers}`;percent.innerText=maxPlayers?`📊 ${Math.round((onlinePlayers/maxPlayers*100))}%`:'📊 0%';}
 else{statusDisplay='🔴 OFFLINE';playersCount.innerText='0 / 0';percent.innerText='📊 0%';}
 document.getElementById('status').innerText=statusDisplay;
+// DŹWIĘK DOŁĄCZENIA
 if(isOnline && lastStatus!=='online'){playPlayerJoin();}
 lastStatus=isOnline?'online':'offline';
 })
 .catch(()=>{document.getElementById('status').innerText='🟡 OFFLINE (Brak danych)';playersCount.innerText='0 / 0';percent.innerText='📊 0%';});
 }
-fetchStatus();setInterval(fetchStatus,5000);
+fetchStatus();
+setInterval(fetchStatus,5000);
 </script>
 </body>
 </html>
