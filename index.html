@@ -25,6 +25,21 @@ body.light{
 }
 body{background:radial-gradient(circle at top,var(--bg1),var(--bg2));color:var(--text);line-height:1.6;transition:.5s;}
 
+/* ===== PRELOADER ===== */
+#preloader {
+  position:fixed;
+  inset:0;
+  background:var(--bg1);
+  color:var(--text);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:2rem;
+  font-weight:bold;
+  z-index:9999;
+  transition:opacity 0.5s ease;
+}
+
 /* ===== HEADER ===== */
 header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px;}
 h1{font-size:clamp(3rem,7vw,6rem);font-weight:900;margin:10px 0 25px;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:float 3s ease-in-out infinite;}
@@ -108,7 +123,6 @@ footer{text-align:center;padding:40px 20px;font-size:.9em;color:rgba(255,255,255
 <p data-pl="👥 GRACZE ONLINE:" data-en="👥 PLAYERS ONLINE:">👥 GRACZE ONLINE:</p>
 <p><span id="playersCount">0 / 0</span></p>
 <p><span id="percent">📊 0%</span></p>
-<div class="creeper"></div>
 </div>
 
 <div class="features">
@@ -133,37 +147,29 @@ footer{text-align:center;padding:40px 20px;font-size:.9em;color:rgba(255,255,255
 
 <footer>© 2025 NeoNCraf • Serwer Minecraft</footer>
 
-<!-- AUDIO -->
-<audio id="menuMusic" loop>
-  <source src="audio/menu1.mp3" type="audio/mpeg">
-</audio>
-<audio id="ambient" loop>
-  <source src="audio/rain_wind.mp3" type="audio/mpeg">
-</audio>
-<audio id="playerJoin">
-  <source src="audio/player_join.mp3" type="audio/mpeg">
-</audio>
-
 <script>
 // ===== PRELOADER =====
 window.addEventListener('load',()=>{
-const p=document.getElementById('preloader');
-setTimeout(()=>{p.style.opacity='0';setTimeout(()=>p.style.display='none',500);},2000);
+  const p=document.getElementById('preloader');
+  setTimeout(()=>{
+    p.style.opacity='0';
+    setTimeout(()=>p.style.display='none',500);
+  },1000);
 });
 
 // ===== THEME & LANG =====
 document.getElementById('themeToggle').onclick=()=>document.body.classList.toggle('light');
 let lang='pl';
 document.getElementById('langToggle').onclick=()=>{
-lang=lang==='pl'?'en':'pl';
-document.querySelectorAll('[data-pl]').forEach(e=>{e.innerText=e.dataset[lang];});
+  lang=lang==='pl'?'en':'pl';
+  document.querySelectorAll('[data-pl]').forEach(e=>{e.innerText=e.dataset[lang];});
 };
 document.querySelectorAll('[data-pl]').forEach(e=>{e.innerText=e.dataset[lang];});
 
 // ===== COPY IP =====
 document.getElementById('copyButton').onclick=(e)=>{
-e.preventDefault();
-navigator.clipboard.writeText(document.getElementById('ip').innerText).then(()=>alert('✅ IP skopiowane'));
+  e.preventDefault();
+  navigator.clipboard.writeText(document.getElementById('ip').innerText).then(()=>alert('✅ IP skopiowane'));
 };
 
 // ===== SIDEBAR =====
@@ -178,58 +184,7 @@ function resize(){c.width=innerWidth;c.height=innerHeight;}resize();onresize=res
 let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,s:Math.random()+.2}));
 function anim(){x.clearRect(0,0,c.width,c.height);p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(150,180,255,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0});requestAnimationFrame(anim);}
 anim();
-
-// ===== BACKGROUND + CLOUDS =====
-const canvas=document.getElementById('bgCanvas');const ctx=canvas.getContext('2d');
-function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}
-resizeCanvas();window.addEventListener('resize',resizeCanvas);
-let timeOfDay=0,offset=0;
-const cloudCount=10,clouds=[];
-for(let i=0;i<cloudCount;i++){clouds.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height/2,width:60+Math.random()*40,height:20+Math.random()*20,speed:0.2+Math.random()*0.3});}
-function drawBG(){
-const grd=ctx.createLinearGradient(0,0,0,canvas.height);
-if(timeOfDay<0.25){grd.addColorStop(0,'#000022');grd.addColorStop(1,'#223344');}
-else if(timeOfDay<0.5){grd.addColorStop(0,'#80c0ff');grd.addColorStop(1,'#33aa33');}
-else if(timeOfDay<0.75){grd.addColorStop(0,'#223366');grd.addColorStop(1,'#224422');}
-else{grd.addColorStop(0,'#000011');grd.addColorStop(1,'#001122');}
-ctx.fillStyle=grd;ctx.fillRect(0,0,canvas.width,canvas.height);
-clouds.forEach(c=>{ctx.fillStyle='rgba(255,255,255,0.8)';ctx.beginPath();ctx.ellipse(c.x,c.y,c.width,c.height,0,0,2*Math.PI);ctx.fill();c.x+=c.speed;if(c.x>canvas.width+50)c.x=-100;});
-offset+=0.2;timeOfDay+=0.0005;if(timeOfDay>1)timeOfDay=0;
-requestAnimationFrame(drawBG);}
-drawBG();
-
-// ===== AUDIO =====
-const menuTracks = ['audio/menu1.mp3','audio/menu2.mp3','audio/menu3.mp3'];
-const menuAudio = document.getElementById('menuMusic');
-function playRandomMenu(){const track=menuTracks[Math.floor(Math.random()*menuTracks.length)];menuAudio.src=track;menuAudio.play();}
-playRandomMenu();
-const ambientAudio = document.getElementById('ambient');ambientAudio.volume=0.5;ambientAudio.play().catch(()=>console.log('Autoplay zablokowany'));
-function playPlayerJoin(){document.getElementById('playerJoin').play();}
-
-// ===== STATUS API =====
-let lastStatus;
-const SERVER='neoncraf_mc.aternos.me:34490';
-const playersCount=document.getElementById('playersCount');
-const percent=document.getElementById('percent');
-function fetchStatus(){
-fetch(`https://api.mcstatus.io/v2/status/java/${SERVER}`)
-.then(r=>r.json())
-.then(d=>{
-const isOnline=d.online??false;
-const onlinePlayers=d.players?.online??0;
-const maxPlayers=d.players?.max??0;
-let statusDisplay;
-if(isOnline){statusDisplay='🟢 ONLINE';playersCount.innerText=`${onlinePlayers} / ${maxPlayers}`;percent.innerText=maxPlayers?`📊 ${Math.round((onlinePlayers/maxPlayers*100))}%`:'📊 0%';}
-else{statusDisplay='🔴 OFFLINE';playersCount.innerText='0 / 0';percent.innerText='📊 0%';}
-document.getElementById('status').innerText=statusDisplay;
-// DŹWIĘK DOŁĄCZENIA
-if(isOnline && lastStatus!=='online'){playPlayerJoin();}
-lastStatus=isOnline?'online':'offline';
-})
-.catch(()=>{document.getElementById('status').innerText='🟡 OFFLINE (Brak danych)';playersCount.innerText='0 / 0';percent.innerText='📊 0%';});
-}
-fetchStatus();
-setInterval(fetchStatus,5000);
 </script>
+
 </body>
 </html>
