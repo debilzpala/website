@@ -1,69 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CheetosCraft – Minecraft Server</title>
+<title>CheatosCraft – Serwer Minecraft</title>
 <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Minecraft','Inter',sans-serif;}
-body{
-  overflow-x:hidden;
-  cursor:url('https://i.imgur.com/ZX1aXbX.png'),auto;
-  background:radial-gradient(circle at top,#ff0000,#000);
-  color:#fff;
-}
-header{
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:40px 20px;
-}
-h1{
-  font-size:clamp(3rem,7vw,6rem);
-  background:linear-gradient(90deg,#ff0000,#000);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:white;
-  animation:float 3s ease-in-out infinite;
-}
+body{overflow-x:hidden;cursor:url('https://i.imgur.com/ZX1aXbX.png'),auto;background:radial-gradient(circle at top,#ff0000,#000);}
+header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px;color:#fff;}
+h1{font-size:clamp(3rem,7vw,6rem);background:linear-gradient(90deg,#ff0000,#ff4500);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:float 3s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-header p, .ip, #status-container, .card, #mcToast{color:#fff;}
 .btns{display:flex;gap:15px;margin:25px 0;flex-wrap:wrap;justify-content:center;}
-.btn{padding:14px 28px;border-radius:14px;text-decoration:none;font-weight:600;transition:.25s;cursor:pointer;color:#fff;}
-.primary{background:linear-gradient(90deg,#ff0000,#800000);color:#000;}
-.secondary{border:2px solid #ff0000;background:none;color:#fff;}
+.btn{padding:14px 28px;border-radius:14px;text-decoration:none;font-weight:600;transition:.25s;cursor:pointer;}
+.primary{background:linear-gradient(90deg,#ff0000,#ff4500);color:#000;}
+.secondary{border:2px solid #ff0000;color:#ff0000;background:none;}
 .btn:hover{transform:scale(1.1);}
-.ip{margin-top:10px;color:#fff;}
+.ip{margin-top:10px;color:#ff4500;}
 #copyButton{position:relative;}
-#copyButton::after{
-  content:"Click to copy";
-  position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);
-  background:#000;padding:6px 10px;font-size:.7rem;border-radius:6px;opacity:0;transition:.25s;white-space:nowrap;
-}
+#copyButton::after{content:"Kliknij aby skopiowac";position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);background:#000;padding:6px 10px;font-size:.7rem;border-radius:6px;opacity:0;transition:.25s;white-space:nowrap;}
 #copyButton:hover::after{opacity:1;}
-#mcToast{
-  position:fixed;bottom:40px;left:50%;transform:translateX(-50%) scale(.9);
-  background:#111;border:3px solid #3aff3a;padding:14px 26px;font-size:14px;
-  opacity:0;transition:.35s ease;box-shadow:0 0 20px rgba(0,0,0,.6);z-index:9999;color:#fff;
-}
+#mcToast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) scale(.9);background:#111;border:3px solid #3aff3a;padding:14px 26px;font-size:14px;opacity:0;transition:.35s ease;box-shadow:0 0 20px rgba(0,0,0,.6);z-index:9999;}
 #mcToast.show{opacity:1;transform:translateX(-50%) scale(1);}
-#status-container{
-  width:clamp(300px,80%,400px);
-  margin:30px auto;padding:30px;
-  background:rgba(255,255,255,.05);border-radius:24px;backdrop-filter:blur(14px);
-  text-align:center;color:#fff;
-}
+#status-container{width:clamp(300px,80%,400px);margin:30px auto;padding:30px;background:rgba(255,255,255,.05);border-radius:24px;backdrop-filter:blur(14px);text-align:center;color:#fff;}
 #serverIcon{width:64px;height:64px;margin-bottom:10px;}
 .features{display:flex;justify-content:center;gap:30px;width:100%;max-width:100vw;flex-wrap:wrap;padding:0 20px;margin:0 auto;}
-.card{
-  min-width:120px;min-height:180px;background:rgba(255,255,255,.05);
-  border-radius:24px;padding:15px;backdrop-filter:blur(14px);
-  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
-  transition:.25s;color:#fff;
-}
+.card{min-width:120px;min-height:180px;background:rgba(255,255,255,.05);border-radius:24px;padding:15px;backdrop-filter:blur(14px);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;transition:.25s;}
 .card h3{font-size:1rem;margin-bottom:8px;}
 .card p{font-size:.8rem;}
 .card:hover{transform:translateY(-10px) scale(1.03);box-shadow:0 10px 20px rgba(0,0,0,.3);}
@@ -78,10 +40,10 @@ footer{text-align:center;padding:30px;opacity:.6;color:#fff;}
 <canvas id="particles"></canvas>
 
 <header>
-<p>MODERN MINECRAFT SERVER</p>
-<h1>CheetosCraft</h1>
+<p>NOWOCZESNY SERWER MINECRAFT</p>
+<h1>CheatosCraft</h1>
 <div class="btns">
-<a href="#" id="copyButton" class="btn primary">COPY SERVER IP</a>
+<a href="#" id="copyButton" class="btn primary">SKOPIUJ IP SERWERA</a>
 <a href="https://discord.gg/XUVDHUM8" target="_blank" class="btn secondary">DISCORD</a>
 </div>
 <p class="ip">IP: <span id="ip">B6steak.aternos.me:13735</span></p>
@@ -89,37 +51,37 @@ footer{text-align:center;padding:30px;opacity:.6;color:#fff;}
 
 <section>
 <div id="status-container">
-<img id="serverIcon" src="" alt="Server icon">
-<h3>📊 SERVER STATUS</h3>
-<p id="status">Checking...</p>
-<p>MOTD: <span id="motd">Loading...</span></p>
-<p>👥 PLAYERS ONLINE: <span id="playersCount">0 / 0</span></p>
+<img id="serverIcon" src="" alt="Ikona serwera">
+<h3>📊 STATUS SERWERA</h3>
+<p id="status">Sprawdzanie...</p>
+<p>MOTD: <span id="motd">Ladowanie...</span></p>
+<p>👥 GRACZE ONLINE: <span id="playersCount">0 / 0</span></p>
 <p><span id="percent">📊 0%</span></p>
 </div>
 
 <div class="features">
 <div class="card">
-<h3>⚡ PERFORMANCE</h3>
-<p>Stable server, low ping, no lag – smooth gameplay 24/7.</p>
+<h3>⚡ WYDAJNOSC</h3>
+<p>Stabilny serwer, niski ping i brak lagow – gramy plynie 24/7.</p>
 </div>
 <div class="card">
-<h3>🧩 MODES</h3>
-<p>Custom systems and events.</p>
+<h3>🧩 TRYBY</h3>
+<p>Autorskie systemy i eventy.</p>
 </div>
 <div class="card">
-<h3>👥 COMMUNITY</h3>
-<p>Active players and helpful staff.</p>
+<h3>👥 SPOLECZNOSC</h3>
+<p>Aktywni gracze i pomocna administracja.</p>
 </div>
 <div class="card">
-<h3>🔒 SECURITY</h3>
-<p>Anti-cheat, backups, and player data protection.</p>
+<h3>🔒 BEZPIECZENSTWO</h3>
+<p>Anty-cheat, backupy i ochrona danych graczy.</p>
 </div>
 </div>
 </section>
 
 <footer>© 2025 CheetosCraft • Minecraft Server</footer>
 
-<div id="mcToast">📋 IP copied to clipboard</div>
+<div id="mcToast">📋 IP skopiowane do schowka</div>
 <audio id="clickSound"><source src="audio/click.mp3" type="audio/mpeg"></audio>
 
 <script>
@@ -130,13 +92,13 @@ const toast=document.getElementById("mcToast");
 const clickSound=document.getElementById("clickSound");
 copyBtn.onclick=(e)=>{
   e.preventDefault();
-  const textarea = document.createElement("textarea");
-  textarea.value = ipText.innerText;
+  const textarea=document.createElement('textarea');
+  textarea.value=ipText.innerText;
   document.body.appendChild(textarea);
   textarea.select();
-  textarea.setSelectionRange(0, 99999);
   document.execCommand('copy');
   document.body.removeChild(textarea);
+
   clickSound.currentTime=0; clickSound.play().catch(()=>{});
   toast.classList.add("show");
   setTimeout(()=>toast.classList.remove("show"),2500);
@@ -149,7 +111,7 @@ let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.hei
 function anim(){x.clearRect(0,0,c.width,c.height);p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(255,200,100,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0});requestAnimationFrame(anim);}
 anim();
 
-// ===== BACKGROUND CLOUDS =====
+// ===== BACKGROUND CHMURY =====
 const canvas=document.getElementById('bgCanvas');const ctx=canvas.getContext('2d');
 function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}resizeCanvas();window.addEventListener('resize',resizeCanvas);
 let clouds=[];for(let i=0;i<12;i++){clouds.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height/2,width:60+Math.random()*40,height:20+Math.random()*20,speed:0.2+Math.random()*0.3});}
@@ -165,24 +127,29 @@ async function fetchStatus(){
     const online = data.online ?? false;
     const onlinePlayers = data.onlinePlayers ?? 0;
     const maxPlayers = data.maxPlayers ?? 0;
-    const motd = data.motd ?? '';
+    const motd = data.motd ?? 'Brak MOTD';
     const icon = data.icon ?? '';
 
-    // Check offline in MOTD
-    const isOnline = !motd.toLowerCase().includes("offline") && online;
+    // jesli motd zawiera slowo offline
+    const motdLower = motd.toLowerCase();
+    const statusEl = document.getElementById('status');
+    if(motdLower.includes('offline')){
+      statusEl.innerText='🔴 OFFLINE';
+    } else {
+      statusEl.innerText=online ? '🟢 ONLINE' : '🔴 OFFLINE';
+    }
 
-    document.getElementById('status').innerText = isOnline ? '🟢 ONLINE' : '🔴 OFFLINE';
     document.getElementById('playersCount').innerText = `${onlinePlayers} / ${maxPlayers}`;
-    document.getElementById('motd').innerText = motd || 'No MOTD';
+    document.getElementById('motd').innerText = motd;
     if(icon) document.getElementById('serverIcon').src = icon;
 
     const percentEl=document.getElementById('percent');
     percentEl.innerText = maxPlayers>0 ? `📊 ${Math.round((onlinePlayers/maxPlayers)*100)}%` : '📊 0%';
   } catch(e){
-    console.error('API error',e);
-    document.getElementById('status').innerText='🟡 OFFLINE (No data)';
+    console.error('Blad API',e);
+    document.getElementById('status').innerText='🟡 OFFLINE (Brak danych)';
     document.getElementById('playersCount').innerText='0 / 0';
-    document.getElementById('motd').innerText='No MOTD';
+    document.getElementById('motd').innerText='Brak MOTD';
     document.getElementById('percent').innerText='📊 0%';
   }
 }
