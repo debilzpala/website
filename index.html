@@ -7,29 +7,40 @@
 <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Minecraft','Inter',sans-serif;}
-body{overflow-x:hidden;cursor:url('https://i.imgur.com/ZX1aXbX.png'),auto;background:radial-gradient(circle at top,#ff0000,#000);}
-header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px;color:#fff;}
-h1{font-size:clamp(3rem,7vw,6rem);background:linear-gradient(90deg,#ff0000,#000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:float 3s ease-in-out infinite;}
+body{
+  overflow-x:hidden;
+  cursor:url('https://i.imgur.com/ZX1aXbX.png'),auto;
+  background:radial-gradient(circle at top,#ff0000,#000);
+  color:#fff;
+}
+header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px;}
+h1{
+  font-size:clamp(3rem,7vw,6rem);
+  background:linear-gradient(90deg,#ff8c00,#000);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:float 3s ease-in-out infinite;
+}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
 .btns{display:flex;gap:15px;margin:25px 0;flex-wrap:wrap;justify-content:center;}
 .btn{padding:14px 28px;border-radius:14px;text-decoration:none;font-weight:600;transition:.25s;cursor:pointer;color:#fff;}
-.primary{background:linear-gradient(90deg,#ff0000,#000);}
-.secondary{border:2px solid #ff0000;background:none;color:#fff;}
+.primary{background:linear-gradient(90deg,#ff8c00,#ff0000);}
+.secondary{border:2px solid #ff8c00;background:none;color:#fff;}
 .btn:hover{transform:scale(1.1);}
 .ip{margin-top:10px;color:#fff;}
 #copyButton{position:relative;}
 #copyButton::after{content:"Kliknij aby skopiowac";position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);background:#000;padding:6px 10px;font-size:.7rem;border-radius:6px;opacity:0;transition:.25s;white-space:nowrap;}
 #copyButton:hover::after{opacity:1;}
-#mcToast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) scale(.9);background:#111;border:3px solid #3aff3a;padding:14px 26px;font-size:14px;opacity:0;transition:.35s ease;box-shadow:0 0 20px rgba(0,0,0,.6);z-index:9999;color:#fff;}
+#mcToast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) scale(.9);background:#111;border:3px solid #3aff3a;padding:14px 26px;font-size:14px;opacity:0;transition:.35s ease;box-shadow:0 0 20px rgba(0,0,0,.6);z-index:9999;}
 #mcToast.show{opacity:1;transform:translateX(-50%) scale(1);}
-#status-container{width:clamp(300px,80%,400px);margin:30px auto;padding:30px;background:rgba(255,255,255,.05);border-radius:24px;backdrop-filter:blur(14px);text-align:center;color:#fff;}
+#status-container{width:clamp(300px,80%,400px);margin:30px auto;padding:30px;background:rgba(255,255,255,.05);border-radius:24px;backdrop-filter:blur(14px);text-align:center;}
 #serverIcon{width:64px;height:64px;margin-bottom:10px;}
-.features{display:flex;justify-content:center;gap:30px;width:100%;max-width:100vw;flex-wrap:wrap;padding:0 20px;margin:0 auto;color:#fff;}
-.card{min-width:120px;min-height:180px;background:rgba(255,255,255,.05);border-radius:24px;padding:15px;backdrop-filter:blur(14px);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;transition:.25s;}
+.features{display:flex;justify-content:center;gap:30px;width:100%;max-width:100vw;flex-wrap:wrap;padding:0 20px;margin:0 auto;}
+.card{min-width:120px;min-height:180px;background:rgba(255,255,255,.05);border-radius:24px;padding:15px;backdrop-filter:blur(14px);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;transition:.25s;color:#fff;}
 .card h3{font-size:1rem;margin-bottom:8px;}
 .card p{font-size:.8rem;}
 .card:hover{transform:translateY(-10px) scale(1.03);box-shadow:0 10px 20px rgba(0,0,0,.3);}
-footer{text-align:center;padding:30px;color:#fff;}
+footer{text-align:center;padding:30px;color:#fff;opacity:1;}
 #particles,#bgCanvas{position:fixed;inset:0;z-index:-1;}
 .cloud{position:absolute;width:80px;height:40px;background:rgba(255,255,255,0.6);border-radius:40px;filter:blur(2px);pointer-events:none;}
 </style>
@@ -61,15 +72,15 @@ footer{text-align:center;padding:30px;color:#fff;}
 
 <div class="features">
 <div class="card">
-<h3>⚡ WYDAJNOSC</h3>
-<p>Stabilny serwer, niski ping i brak lagow – gramy płynnie 24/7.</p>
+<h3>⚡ WYDAJNOŚC</h3>
+<p>Stabilny serwer, niski ping i brak lagow – gramy plynnie 24/7.</p>
 </div>
 <div class="card">
 <h3>🧩 TRYBY</h3>
 <p>Autorskie systemy i eventy.</p>
 </div>
 <div class="card">
-<h3>👥 SPOŁECZNOSC</h3>
+<h3>👥 SPOLECZNOSC</h3>
 <p>Aktywni gracze i pomocna administracja.</p>
 </div>
 <div class="card">
@@ -79,7 +90,7 @@ footer{text-align:center;padding:30px;color:#fff;}
 </div>
 </section>
 
-<footer>© 2025 CheatosCraft • Minecraft Server</footer>
+<footer>© 2025 CheetosCraft • Minecraft Server</footer>
 
 <div id="mcToast">📋 IP skopiowane do schowka</div>
 <audio id="clickSound"><source src="audio/click.mp3" type="audio/mpeg"></audio>
@@ -90,19 +101,14 @@ const copyBtn=document.getElementById("copyButton");
 const ipText=document.getElementById("ip");
 const toast=document.getElementById("mcToast");
 const clickSound=document.getElementById("clickSound");
-
-copyBtn.addEventListener("click", async (e) => {
+copyBtn.onclick=(e)=>{
   e.preventDefault();
-  try {
-    await navigator.clipboard.writeText(ipText.innerText);
-    clickSound.currentTime = 0; clickSound.play().catch(()=>{});
+  navigator.clipboard.writeText(ipText.innerText).then(()=>{
+    clickSound.currentTime=0; clickSound.play().catch(()=>{});
     toast.classList.add("show");
     setTimeout(()=>toast.classList.remove("show"),2500);
-  } catch(err){
-    alert("Nie udalo sie skopiowac IP. Sprobuj recznie.");
-    console.error("Blad kopiowania:", err);
-  }
-});
+  });
+};
 
 // ===== PARTICLES =====
 const c=document.getElementById('particles'),x=c.getContext('2d');
@@ -114,8 +120,7 @@ anim();
 // ===== BACKGROUND CHMURY =====
 const canvas=document.getElementById('bgCanvas');const ctx=canvas.getContext('2d');
 function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}resizeCanvas();window.addEventListener('resize',resizeCanvas);
-let clouds=[];
-for(let i=0;i<12;i++){clouds.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height/2,width:60+Math.random()*40,height:20+Math.random()*20,speed:0.2+Math.random()*0.3});}
+let clouds=[];for(let i=0;i<12;i++){clouds.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height/2,width:60+Math.random()*40,height:20+Math.random()*20,speed:0.2+Math.random()*0.3});}
 function drawBG(){
 const grd=ctx.createLinearGradient(0,0,0,canvas.height);
 grd.addColorStop(0,'#ff0000');grd.addColorStop(1,'#000');
@@ -134,15 +139,12 @@ async function fetchStatus(){
     const online = data.online ?? false;
     const onlinePlayers = data.onlinePlayers ?? 0;
     const maxPlayers = data.maxPlayers ?? 0;
-    let motd = data.motd ?? 'Brak MOTD';
+    const motd = data.motd ?? 'Brak MOTD';
     const icon = data.icon ?? '';
 
-    // Jeśli motd zawiera slowo offline
-    if(motd.toLowerCase().includes('offline')) document.getElementById('status').innerText='🔴 OFFLINE';
-    else document.getElementById('status').innerText=online?'🟢 ONLINE':'🔴 OFFLINE';
-
-    document.getElementById('playersCount').innerText=`${onlinePlayers} / ${maxPlayers}`;
-    document.getElementById('motd').innerText=motd;
+    document.getElementById('status').innerText = motd.toLowerCase().includes("offline") ? '🔴 OFFLINE' : '🟢 ONLINE';
+    document.getElementById('playersCount').innerText = `${onlinePlayers} / ${maxPlayers}`;
+    document.getElementById('motd').innerText = motd;
     if(icon) document.getElementById('serverIcon').src = icon;
 
     const percentEl=document.getElementById('percent');
