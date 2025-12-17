@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CheetosCraft – Serwer Minecraft</title>
+<title>CheetosCraft – Minecraft Server</title>
 <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Minecraft','Inter',sans-serif;}
@@ -39,7 +39,7 @@ header p, .ip, #status-container, .card, #mcToast{color:#fff;}
 .ip{margin-top:10px;color:#fff;}
 #copyButton{position:relative;}
 #copyButton::after{
-  content:"Kliknij aby skopiować";
+  content:"Click to copy";
   position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);
   background:#000;padding:6px 10px;font-size:.7rem;border-radius:6px;opacity:0;transition:.25s;white-space:nowrap;
 }
@@ -78,10 +78,10 @@ footer{text-align:center;padding:30px;opacity:.6;color:#fff;}
 <canvas id="particles"></canvas>
 
 <header>
-<p>NOWOCZESNY SERWER MINECRAFT</p>
+<p>MODERN MINECRAFT SERVER</p>
 <h1>CheetosCraft</h1>
 <div class="btns">
-<a href="#" id="copyButton" class="btn primary">SKOPIUJ IP SERWERA</a>
+<a href="#" id="copyButton" class="btn primary">COPY SERVER IP</a>
 <a href="https://discord.gg/XUVDHUM8" target="_blank" class="btn secondary">DISCORD</a>
 </div>
 <p class="ip">IP: <span id="ip">B6steak.aternos.me:13735</span></p>
@@ -89,37 +89,37 @@ footer{text-align:center;padding:30px;opacity:.6;color:#fff;}
 
 <section>
 <div id="status-container">
-<img id="serverIcon" src="" alt="Ikona serwera">
-<h3>📊 STATUS SERWERA</h3>
-<p id="status">Sprawdzanie...</p>
-<p>MOTD: <span id="motd">Ładowanie...</span></p>
-<p>👥 GRACZE ONLINE: <span id="playersCount">0 / 0</span></p>
+<img id="serverIcon" src="" alt="Server icon">
+<h3>📊 SERVER STATUS</h3>
+<p id="status">Checking...</p>
+<p>MOTD: <span id="motd">Loading...</span></p>
+<p>👥 PLAYERS ONLINE: <span id="playersCount">0 / 0</span></p>
 <p><span id="percent">📊 0%</span></p>
 </div>
 
 <div class="features">
 <div class="card">
-<h3>⚡ WYDAJNOSC</h3>
-<p>Stabilny serwer, niski ping i malo lagow – gramy plynnie 7/7.</p>
+<h3>⚡ PERFORMANCE</h3>
+<p>Stable server, low ping, no lag – smooth gameplay 24/7.</p>
 </div>
 <div class="card">
-<h3>🧩 TRYBY</h3>
-<p>Autorskie systemy i eventy.</p>
+<h3>🧩 MODES</h3>
+<p>Custom systems and events.</p>
 </div>
 <div class="card">
-<h3>👥 SPOLECZNOSC</h3>
-<p>Aktywni gracze i pomocna administracja.</p>
+<h3>👥 COMMUNITY</h3>
+<p>Active players and helpful staff.</p>
 </div>
 <div class="card">
-<h3>🔒 BEZPIECZENSTWO</h3>
-<p>Anty-cheat, backupy i ochrona danych graczy.</p>
+<h3>🔒 SECURITY</h3>
+<p>Anti-cheat, backups, and player data protection.</p>
 </div>
 </div>
 </section>
 
 <footer>© 2025 CheetosCraft • Minecraft Server</footer>
 
-<div id="mcToast">📋 IP skopiowane do schowka</div>
+<div id="mcToast">📋 IP copied to clipboard</div>
 <audio id="clickSound"><source src="audio/click.mp3" type="audio/mpeg"></audio>
 
 <script>
@@ -130,7 +130,13 @@ const toast=document.getElementById("mcToast");
 const clickSound=document.getElementById("clickSound");
 copyBtn.onclick=(e)=>{
   e.preventDefault();
-  navigator.clipboard.writeText(ipText.innerText);
+  const textarea = document.createElement("textarea");
+  textarea.value = ipText.innerText;
+  document.body.appendChild(textarea);
+  textarea.select();
+  textarea.setSelectionRange(0, 99999);
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
   clickSound.currentTime=0; clickSound.play().catch(()=>{});
   toast.classList.add("show");
   setTimeout(()=>toast.classList.remove("show"),2500);
@@ -143,7 +149,7 @@ let p=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.hei
 function anim(){x.clearRect(0,0,c.width,c.height);p.forEach(a=>{x.beginPath();x.arc(a.x,a.y,a.r,0,7);x.fillStyle='rgba(255,200,100,.6)';x.fill();a.y+=a.s;if(a.y>c.height)a.y=0});requestAnimationFrame(anim);}
 anim();
 
-// ===== BACKGROUND CHMURY =====
+// ===== BACKGROUND CLOUDS =====
 const canvas=document.getElementById('bgCanvas');const ctx=canvas.getContext('2d');
 function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}resizeCanvas();window.addEventListener('resize',resizeCanvas);
 let clouds=[];for(let i=0;i<12;i++){clouds.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height/2,width:60+Math.random()*40,height:20+Math.random()*20,speed:0.2+Math.random()*0.3});}
@@ -162,28 +168,25 @@ async function fetchStatus(){
     const motd = data.motd ?? '';
     const icon = data.icon ?? '';
 
-    // Sprawdzenie offline w MOTD
-    const isOffline = motd.toLowerCase().includes("offline") ? false : online;
+    // Check offline in MOTD
+    const isOnline = !motd.toLowerCase().includes("offline") && online;
 
-    document.getElementById('status').innerText = isOffline ? '🟢 ONLINE' : '🔴 OFFLINE';
+    document.getElementById('status').innerText = isOnline ? '🟢 ONLINE' : '🔴 OFFLINE';
     document.getElementById('playersCount').innerText = `${onlinePlayers} / ${maxPlayers}`;
-    document.getElementById('motd').innerText = motd || 'Brak MOTD';
+    document.getElementById('motd').innerText = motd || 'No MOTD';
     if(icon) document.getElementById('serverIcon').src = icon;
 
-    // procent graczy
     const percentEl=document.getElementById('percent');
     percentEl.innerText = maxPlayers>0 ? `📊 ${Math.round((onlinePlayers/maxPlayers)*100)}%` : '📊 0%';
-
   } catch(e){
-    console.error('Błąd API',e);
-    document.getElementById('status').innerText='🟡 OFFLINE (Brak danych)';
+    console.error('API error',e);
+    document.getElementById('status').innerText='🟡 OFFLINE (No data)';
     document.getElementById('playersCount').innerText='0 / 0';
-    document.getElementById('motd').innerText='Brak MOTD';
+    document.getElementById('motd').innerText='No MOTD';
     document.getElementById('percent').innerText='📊 0%';
   }
 }
-fetchStatus();
-setInterval(fetchStatus,5000);
+fetchStatus(); setInterval(fetchStatus,5000);
 </script>
 </body>
 </html>
