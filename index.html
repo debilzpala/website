@@ -135,7 +135,7 @@ drawBG();
 // ===== STATUS API =====
 async function fetchStatus(){
     try{
-        const res = await fetch('https://eloelo-production.up.railway.app/api/status?host=B6steak.aternos.me&port=13735');
+        const res = await fetch('https://eloelo-production.up.railway.app/api/status');
         const data = await res.json();
 
         const online = data.online ?? false;
